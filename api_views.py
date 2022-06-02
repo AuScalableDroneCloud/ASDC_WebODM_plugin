@@ -7,7 +7,12 @@ from rest_framework.response import Response
 class GetUserProjects(APIView):
     # Returns list of user projects given email address
     # ROOTURL/api/plugins/asdc/userprojects?email=email@host.tld
-    permission_classes = (permissions.IsAuthenticated,)
+
+    #Allow access only to authorised users
+    #permission_classes = (permissions.IsAuthenticated,)
+
+    #Allow read access to anon
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         email = self.request.query_params.get('email', None)
