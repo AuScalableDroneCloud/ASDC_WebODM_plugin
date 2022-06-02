@@ -16,10 +16,15 @@ class GetUserProjects(APIView):
 
     def get(self, request):
         email = self.request.query_params.get('email', None)
+        detail = self.request.query_params.get('detail', False)
         try:
             user = User.objects.get(email = email)
+            #TODO: support shared projects too (read/write or read only)
             projects = Project.objects.filter(owner_id = user.id)
-            plist = [p.id for p in projects]
+            if detail:
+                plist = [{"id": p.id, "name": p.name, "description": p.description} for p in projects]
+            else:
+                plist = [p.id for p in projects]
         except:
             plist = []
 
