@@ -1,0 +1,68 @@
+from rest_framework import status
+from rest_framework.response import Response
+
+from app.plugins import PluginBase, Menu, MountPoint, get_current_plugin
+from app.plugins.views import TaskView
+from django.shortcuts import render, redirect
+from django import forms
+from django.views.generic.base import RedirectView
+
+from .app_views import HomeView, LoadButtonsView
+from .api_views import GetUserProjects
+
+class Plugin(PluginBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def main_menu(self):
+        #Icons: https://fontawesome.com/v5/search?m=free
+        return [#Menu("ASDC", self.public_url(""), "fas fa-road"),
+                Menu("ASDC Tools", "#", "fas fa-toolbox", submenu=[
+                    Menu("Settings", self.public_url(""), "fas fa-globe-asia"),
+                    Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
+                    Menu("Terria", self.public_url("terria/"), "fas fa-map"),
+                    #Menu("Terria", "https://asdc.cloud.edu.au/terria/", "fas fa-map"),
+                  ]),
+                Menu("JupyterHub", self.public_url("jupyterhub/"), "fab fa-python", submenu=[
+                    #Menu("JupyterHub inline", self.public_url("jupyterhub/"), "fab fa-python"),
+                    Menu("JupyterHub", "https://jupyter.asdc.cloud.edu.au/", "fab fa-python"),
+                    #Menu("Pipelines", "#", "fas fa-stream", submenu=[
+                        Menu("Default", "https://jupyter.asdc.cloud.edu.au/hub/spawn?profile=default", "fas fa-stream"),
+                        Menu("Base", "https://jupyter.asdc.cloud.edu.au/hub/spawn?profile=base", "fas fa-stream"),
+                        Menu("Fracture Detection", "https://jupyter.asdc.cloud.edu.au/hub/spawn?profile=fd", "fas fa-stream"),
+                        Menu("Experimental", "https://jupyter.asdc.cloud.edu.au/hub/spawn?profile=exp", "fas fa-stream"),
+                        #Menu("Custom Test", "https://jupyter.asdc.cloud.edu.au/hub/spawn?image=jupyter/minimal-notebook:hub-2.2.2&mem_limit=8196M", "fas fa-stream"),
+                    #]), #It seems only one submenu level is possible
+                  ]),
+               ]
+
+    def include_js_files(self):
+        return ["load_buttons.js"]
+
+    #def include_css_files(self):
+    #    return ['test.css'] #In public
+
+    def build_jsx_components(self):
+        return ["OpenButton.jsx"]
+
+    def app_mount_points(self):
+        return [
+            MountPoint("$", HomeView(self)),
+            MountPoint('/cesium/$', lambda request: render(request, self.template_path("iframe.html"), {
+                'frame_url' : "https://asdc.cloud.edu.au/cesium/Apps/ASDC/",
+            })),
+            MountPoint('/terria/$', lambda request: render(request, self.template_path("iframe.html"), {
+                'frame_url' : "https://asdc.cloud.edu.au/terria/",
+            })),
+            #MountPoint('/jupyterhub/$', lambda request: redirect("https://jupyter.asdc.cloud.edu.au")),
+            #MountPoint('/pipelines/$', lambda request: redirect("https://jupyter.asdc.cloud.edu.au")),
+
+            MountPoint("load_buttons.js$", LoadButtonsView(self)),
+            #MountPoint("tasks/(?P<pk>[^/.]+)/open", OpenTaskView.as_view()),
+        ]
+
+    def api_mount_points(self):
+        return [
+            MountPoint('userprojects', GetUserProjects.as_view()),
+            #MountPoint('task/(?P<pk>[^/.]+)/shortlink', GetShortLink.as_view()),
+        ]

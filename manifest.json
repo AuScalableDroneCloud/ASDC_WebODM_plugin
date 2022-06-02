@@ -1,0 +1,13 @@
+{
+	"name": "ASDC Plugin Interface",
+	"webodmMinVersion": "1.9.0",
+	"description": "Testing",
+	"version": "0.0.1",
+	"author": "Owen Kaluza",
+	"email": "owen.kaluza@monash.edu",
+	"repository": "https://github.com/AuScalableDroneCloud/WebODM",
+	"tags": ["asdc", "jupyter", "jupyterhub"],
+	"homepage": "https://asdc.cloud.edu.au",
+	"experimental": true,
+	"deprecated": false
+}
