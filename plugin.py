@@ -10,7 +10,11 @@ from django.views.generic.base import RedirectView
 from .app_views import HomeView, LoadButtonsView
 from .api_views import GetUserProjects
 
+import os
+host = os.environ.get('WO_HOST')
+
 class Plugin(PluginBase):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -21,17 +25,17 @@ class Plugin(PluginBase):
                     Menu("Settings", self.public_url(""), "fas fa-globe-asia"),
                     Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
                     Menu("Terria", self.public_url("terria/"), "fas fa-map"),
-                    #Menu("Terria", "https://asdc.cloud.edu.au/terria/", "fas fa-map"),
+                    #Menu("Terria", f"https://{host}/terria/", "fas fa-map"),
                   ]),
                 Menu("JupyterHub", self.public_url("jupyterhub/"), "fab fa-python", submenu=[
                     #Menu("JupyterHub inline", self.public_url("jupyterhub/"), "fab fa-python"),
-                    Menu("JupyterHub", "https://jupyter.asdc.cloud.edu.au/", "fab fa-python"),
+                    Menu("JupyterHub", f"https://jupyter.{host}/", "fab fa-python"),
                     #Menu("Pipelines", "#", "fas fa-stream", submenu=[
-                        Menu("Default", "https://jupyter.asdc.cloud.edu.au/hub/spawn?profile=default", "fas fa-stream"),
-                        Menu("Base", "https://jupyter.asdc.cloud.edu.au/hub/spawn?profile=base", "fas fa-stream"),
-                        Menu("Fracture Detection", "https://jupyter.asdc.cloud.edu.au/hub/spawn?profile=fd", "fas fa-stream"),
-                        Menu("Experimental", "https://jupyter.asdc.cloud.edu.au/hub/spawn?profile=exp", "fas fa-stream"),
-                        #Menu("Custom Test", "https://jupyter.asdc.cloud.edu.au/hub/spawn?image=jupyter/minimal-notebook:hub-2.2.2&mem_limit=8196M", "fas fa-stream"),
+                        Menu("Default", f"https://jupyter.{host}/hub/spawn?profile=default", "fas fa-stream"),
+                        Menu("Base", f"https://jupyter.{host}/hub/spawn?profile=base", "fas fa-stream"),
+                        Menu("Fracture Detection", f"https://jupyter.{host}/hub/spawn?profile=fd", "fas fa-stream"),
+                        Menu("Experimental", f"https://jupyter.{host}/hub/spawn?profile=exp", "fas fa-stream"),
+                        #Menu("Custom Test", f"https://jupyter.{host}/hub/spawn?image=jupyter/minimal-notebook:hub-2.2.2&mem_limit=8196M", "fas fa-stream"),
                     #]), #It seems only one submenu level is possible
                   ]),
                ]
@@ -48,14 +52,15 @@ class Plugin(PluginBase):
     def app_mount_points(self):
         return [
             MountPoint("$", HomeView(self)),
+            #MountPoint('/test/$', lambda request: render(request, self.template_path("iframe.html"), {
             MountPoint('/cesium/$', lambda request: render(request, self.template_path("iframe.html"), {
-                'frame_url' : "https://asdc.cloud.edu.au/cesium/Apps/ASDC/",
+                'frame_url' : f"https://{host}/cesium/Apps/ASDC/",
             })),
             MountPoint('/terria/$', lambda request: render(request, self.template_path("iframe.html"), {
-                'frame_url' : "https://asdc.cloud.edu.au/terria/",
+                'frame_url' : f"https://{host}/terria/",
             })),
-            #MountPoint('/jupyterhub/$', lambda request: redirect("https://jupyter.asdc.cloud.edu.au")),
-            #MountPoint('/pipelines/$', lambda request: redirect("https://jupyter.asdc.cloud.edu.au")),
+            #MountPoint('/jupyterhub/$', lambda request: redirect(f"https://jupyter.{host}")),
+            #MountPoint('/pipelines/$', lambda request: redirect(f"https://jupyter.{host}")),
 
             MountPoint("load_buttons.js$", LoadButtonsView(self)),
             #MountPoint("tasks/(?P<pk>[^/.]+)/open", OpenTaskView.as_view()),
