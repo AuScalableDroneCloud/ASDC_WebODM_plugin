@@ -8,7 +8,7 @@ from django import forms
 from django.views.generic.base import RedirectView
 
 from .app_views import HomeView, LoadButtonsView
-from .api_views import GetUserProjects
+from .api_views import GetUserProjects, GetUserProjectTasks
 
 import os
 host = os.environ.get('WO_HOST')
@@ -47,7 +47,7 @@ class Plugin(PluginBase):
     #    return ['test.css'] #In public
 
     def build_jsx_components(self):
-        return ["OpenButton.jsx"]
+        return ["OpenButton.jsx", "EditButton.jsx"]
 
     def app_mount_points(self):
         return [
@@ -69,5 +69,8 @@ class Plugin(PluginBase):
     def api_mount_points(self):
         return [
             MountPoint('userprojects', GetUserProjects.as_view()),
+            MountPoint('usertasks', GetUserProjectsAndTasks.as_view()),
+            MountPoint("projects/(?P<project_pk>[^/.]+)/gettasks", GetUserTasks.as_view()),
+            #MountPoint("projects/(?P<project_pk>[^/.]+)/tasks/(?P<pk>[^/.]+)/checkforurl", CheckUrlTaskView.as_view()),
             #MountPoint('task/(?P<pk>[^/.]+)/shortlink', GetShortLink.as_view()),
         ]

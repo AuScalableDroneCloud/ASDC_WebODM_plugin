@@ -1,3 +1,13 @@
+PluginsAPI.Dashboard.addNewTaskButton(["asdc/build/EditButton.js"],
+	function(args, EditButton) {
+        return React.createElement(EditButton, {
+                //onNewTaskAdded: args.onNewTaskAdded,
+                projectId: args.projectId,
+                apiURL: "{{ api_url }}",
+        });
+	}
+);
+
 PluginsAPI.Dashboard.addTaskActionButton(['asdc/build/OpenButton.js'],function(args, OpenButton){
 	var task = args.task;
 
@@ -8,3 +18,24 @@ PluginsAPI.Dashboard.addTaskActionButton(['asdc/build/OpenButton.js'],function(a
 }
 );
 
+/*
+PluginsAPI.Dashboard.addTaskActionButton(
+    ["cloudimport/build/TaskView.js", "cloudimport/build/TaskView.css"],
+	function(args, TaskView) {
+		var reactElement;
+		$.ajax({
+			url: "{{ api_url }}/projects/" + args.task.project + "/tasks/" + args.task.id + "/checkforurl",
+			dataType: 'json',
+			async: false,
+			success: function(data) {
+				if (data.folder_url) {
+					reactElement = React.createElement(TaskView, {
+						folderUrl: data.folder_url,
+					});
+				}
+			}
+		});
+		return reactElement;
+	}
+);
+*/

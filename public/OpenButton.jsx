@@ -12,19 +12,31 @@ export default class OpenButton extends Component {
 
   tid = this.props.task ? this.props.task.id : '';
   pid = this.props.task ? this.props.task.project : '';
-  //handleClick = () => window.open(`https://jupyter.asdc.cloud.edu.au/user-redirect/jupyter_oauth2/custom?project=${this.pid}&task=${this.tid}`, '_blank');
-  handleClick = () => window.open(`https://jupyter.asdc.cloud.edu.au/user-redirect/asdc/import?project=${this.pid}&task=${this.tid}`, '_blank');
+  //handleClick = () => window.open(`https://jupyter.${location.host}//user-redirect/jupyter_oauth2/custom?project=${this.pid}&task=${this.tid}`, '_blank');
+  handleClickNotebook = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?project=${this.pid}&task=${this.tid}`, '_blank');
+  handleClickFiles = () => window.open(`https://jupyter..${location.host}/hub/spawn?profile=exp-${this.pid}w`, '_blank');
 
   render() {
     return (
+		<>
       <Button
         bsStyle={"primary"}
         bsSize={"small"}
-        onClick={this.handleClick}
+        onClick={this.handleClickFiles}
+      >
+        <i className={"fas fa-folder-open icon"} />
+        Edit in JupyterHub
+      </Button>
+
+      <Button
+        bsStyle={"primary"}
+        bsSize={"small"}
+        onClick={this.handleClickNotebook}
       >
         <i className={"fab fa-python icon"} />
-        Open in JupyterHub
+        Open Notebook
       </Button>
+		</>
     );
   }
 }
