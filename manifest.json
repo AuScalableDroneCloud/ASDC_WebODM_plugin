@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"author": "Owen Kaluza",
 	"email": "owen.kaluza@monash.edu",
-	"repository": "https://github.com/AuScalableDroneCloud/WebODM",
+	"repository": "https://github.com/AuScalableDroneCloud/asdc_plugin",
 	"tags": ["asdc", "jupyter", "jupyterhub"],
 	"homepage": "https://asdc.cloud.edu.au",
 	"experimental": true,

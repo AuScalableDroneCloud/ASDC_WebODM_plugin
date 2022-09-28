@@ -9,9 +9,6 @@ class GetUserProjects(APIView):
     # Returns list of user projects given email address
     # ROOTURL/api/plugins/asdc/userprojects?email=email@host.tld
 
-    #Allow access only to authorised users
-    #permission_classes = (permissions.IsAuthenticated,)
-
     #Allow read access to anon
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -33,10 +30,7 @@ class GetUserProjects(APIView):
 
 class GetUserProjectsAndTasks(APIView):
     # Returns list of user projects and their tasks given email address
-    # ROOTURL/api/plugins/asdc/userprojects?email=email@host.tld
-
-    #Allow access only to authorised users
-    #permission_classes = (permissions.IsAuthenticated,)
+    # ROOTURL/api/plugins/asdc/usertasks?email=email@host.tld
 
     #Allow read access to anon
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -68,10 +62,7 @@ class GetProjectTasks(TaskView):
     # ROOTURL/api/plugins/asdc/projects/PROJECT_ID/gettasks
 
     #Allow access only to authorised users
-    #permission_classes = (permissions.IsAuthenticated,)
-
-    #Allow read access to anon
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, project_pk=None):
 
@@ -84,7 +75,10 @@ class GetProjectTasks(TaskView):
         except:
             tlist = []
 
-        return Response(tlist)
+        p = Project.objects.filter(id = project_pk)[0]
+        pdata = {"id": p.id, "name": p.name, "description": p.description, "tasks" : tlist}
+
+        return Response(pdata)
 
 """
 class CheckUrlTaskView(TaskView):
