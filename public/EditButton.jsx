@@ -3,8 +3,9 @@ import React, { Component, Fragment } from "react";
 
 import PropTypes from 'prop-types';
 import { Button } from "react-bootstrap";
+import $ from 'jquery';
 
-import "./OpenButton.scss";
+import "./Button.scss";
 
 export default class EditButton extends Component {
   static propTypes = {
