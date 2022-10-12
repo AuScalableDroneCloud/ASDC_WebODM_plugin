@@ -5,13 +5,15 @@ PluginsAPI.Dashboard.addTaskActionButton(
     }
 );
 
-PluginsAPI.Dashboard.addNewTaskButton(
+/*
+ * Disabled now in favour of a side menu button to mount the selected projects
+ * PluginsAPI.Dashboard.addNewTaskButton(
     ['asdc/build/EditButton.js'],
     function(args, EditButton) {
         return React.createElement(EditButton, {
             projectId: args.projectId
         });
 	  }
-);
+);*/
 
 

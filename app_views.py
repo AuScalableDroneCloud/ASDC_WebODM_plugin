@@ -49,7 +49,6 @@ def HomeView(plugin):
 def LoadButtonsView(plugin):
     def view(request):
 
-        print("REQ PATH:",request.get_full_path())
         return render(
             request,
             plugin.template_path("load_buttons.js"),
