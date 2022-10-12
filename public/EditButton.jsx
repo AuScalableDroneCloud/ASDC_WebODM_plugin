@@ -26,7 +26,7 @@ export default class EditButton extends Component {
   render() {
     return (
       <Button
-        bsStyle={"primary"}
+        bsStyle={"default"}
         bsSize={"small"}
         onClick={this.handleClick}
       >
