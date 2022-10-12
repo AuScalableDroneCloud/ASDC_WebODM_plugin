@@ -19,7 +19,7 @@ export default class EditButton extends Component {
   //tid = this.props.task ? this.props.task.id : '';
   //pid = this.props.projectId;
   //task ? this.props.task.project : '';
-  handleClick = () => window.open(`https://jupyter.${location.host}/spawn?profile=exp-${this.pid}w`, '_blank');
+  handleClick = () => window.open(`https://jupyter.${location.host}/spawn?profile=exp-${this.pid}`, '_blank');
   //handleClickNotebook = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?project=${this.pid}&task=${this.tid}`, '_blank');
   //handleClickFiles = () => window.open(`https://jupyter.${location.host}/hub/spawn?profile=exp-${this.pid}`, '_blank');
 

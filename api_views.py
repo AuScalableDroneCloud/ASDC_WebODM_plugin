@@ -5,6 +5,30 @@ from rest_framework import exceptions, permissions, parsers
 from rest_framework.response import Response
 from app.plugins.views import TaskView
 
+def get_user_projects(email, detail=True):
+    try:
+        user = User.objects.get(email = email)
+        #Get users own projects
+        projects = Project.objects.filter(owner_id = user.id)
+        if detail:
+            plist = {p.id: {"name": p.name, "description": p.description, "readonly": False} for p in projects}
+        else:
+            plist = {p.id: {"readonly": False} for p in projects}
+
+        #Get the shared projects this user has access to (including view only)
+        for e in user.projectuserobjectpermission_set.all():
+            entry = {"readonly": False}
+            if detail:
+                entry = {"name": e.content_object.name, "description": e.content_object.description, "readonly": False}
+            if e.permission.codename == "change_project":
+                plist[e.content_object_id] = entry
+            elif e.permission.codename == "view_project" and not e.content_object_id in plist:
+                entry["readonly"] = True
+                plist[e.content_object_id] = entry
+    except:
+        plist = {}
+    return plist
+
 class GetUserProjects(APIView):
     # Returns list of user projects given email address
     # ROOTURL/api/plugins/asdc/userprojects?email=email@host.tld
@@ -15,18 +39,7 @@ class GetUserProjects(APIView):
     def get(self, request):
         email = self.request.query_params.get('email', None)
         detail = self.request.query_params.get('detail', False)
-        try:
-            user = User.objects.get(email = email)
-            #TODO: support shared projects too (read/write or read only)
-            projects = Project.objects.filter(owner_id = user.id)
-            if detail:
-                plist = [{"id": p.id, "name": p.name, "description": p.description} for p in projects]
-            else:
-                plist = [p.id for p in projects]
-        except:
-            plist = []
-
-        return Response(plist)
+        return Response(get_user_projects(email, detail))
 
 class GetUserProjectsAndTasks(APIView):
     # Returns list of user projects and their tasks given email address
@@ -37,22 +50,19 @@ class GetUserProjectsAndTasks(APIView):
 
     def get(self, request):
         email = self.request.query_params.get('email', None)
-        try:
-            user = User.objects.get(email = email)
-            #TODO: support shared projects too (read/write or read only)
 
-            plist = []
-            projects = Project.objects.filter(owner_id = user.id)
-            for p in projects:
-                #Populate the tasks list
+        #Get users own projects + tasks
+        plist = get_user_projects(email)
+
+        try:
+            #Populate the tasks lists
+            for p in plist:
                 #select column_name,data_type from information_schema.columns where table_name = 'app_task';
-                tasks = Task.objects.filter(project_id = p.id)
-                tlist = [{"id": t.id, "name": t.name} for t in tasks]
-                #Append project entry
-                plist.append({"id": p.id, "name": p.name, "description": p.description, "tasks" : tlist})
+                tasks = Task.objects.filter(project_id = p)
+                plist[p]["tasks"] = [{"id": t.id, "name": t.name} for t in tasks]
 
         except:
-            plist = []
+            plist = {}
 
         return Response(plist)
 
@@ -80,21 +90,3 @@ class GetProjectTasks(TaskView):
 
         return Response(pdata)
 
-"""
-class CheckUrlTaskView(TaskView):
-    def get(self, request, project_pk=None, pk=None):
-
-        # Assert that task exists
-        self.get_and_check_task(request, pk)
-
-        # Check if there is an imported url associated with the project and task
-        combined_id = "{}_{}".format(project_pk, pk)
-        data = get_current_plugin().get_global_data_store().get_json(combined_id, default = None)
-
-        if data == None or 'ddbWebUrl' not in data:
-            return Response({'ddbWebUrl': None}, status=status.HTTP_200_OK)
-        else:
-            return Response({'ddbUrl': data['ddbWebUrl']}, status=status.HTTP_200_OK)
-
-
-"""
