@@ -30,7 +30,7 @@ class Plugin(PluginBase):
                 Menu("JupyterHub", self.public_url("jupyterhub/"), "fab fa-python", submenu=[
                     #Menu("JupyterHub inline", self.public_url("jupyterhub/"), "fab fa-python"),
                     Menu("JupyterHub", f"https://jupyter.{host}/", "fab fa-python"),
-                    Menu("Project Files", f"javascript:location.href = 'https://jupyter.{host}/hub/spawn?profile=exp-' + new URLSearchParams(window.location.search).get('project_task_open')", "fas fa-folder-open icon"),
+                    Menu("Project Files", f"javascript:location.href = 'https://jupyter.{host}/hub/spawn?profile=exp-' + new URLSearchParams(window.location.search).get('project_task_open').replace(',','-')", "fas fa-folder-open icon"),
                     #Menu("Pipelines", "#", "fas fa-stream", submenu=[
                         Menu("Default", f"https://jupyter.{host}/hub/spawn?profile=default", "fas fa-stream"),
                         Menu("Base", f"https://jupyter.{host}/hub/spawn?profile=base", "fas fa-stream"),
