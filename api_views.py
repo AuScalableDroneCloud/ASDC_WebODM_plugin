@@ -4,6 +4,11 @@ from rest_framework.views import APIView
 from rest_framework import exceptions, permissions, parsers
 from rest_framework.response import Response
 from app.plugins.views import TaskView
+from app.plugins import get_current_plugin
+import json
+import yaml
+import requests
+import os
 
 def get_user_projects(email, detail=True):
     try:
@@ -66,6 +71,32 @@ class GetUserProjectsAndTasks(APIView):
 
         return Response(plist)
 
+class GetUserPipelines(APIView):
+    # Returns list of user pipelines given email address
+    # ROOTURL/api/plugins/asdc/userpipelines?email=email@host.tld
+
+    #Allow read access to anon
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request):
+        pipeline_urls = []
+        if 'PIPELINE_URL' in os.environ:
+            pipeline_urls = [os.getenv('PIPELINE_URL')]
+
+        email = self.request.query_params.get('email', None)
+        user = User.objects.get(email = email)
+        ds = get_current_plugin().get_user_data_store(user)
+        urls = ds.get_string('pipelines_url', default="").split(',')
+        pipeline_urls += urls
+        pipelines = []
+        for url in pipeline_urls:
+            response = requests.get(url, timeout=5)
+            if response.status_code == 200:
+                pipeline = yaml.safe_load(response.text)
+                print(pipeline)
+                pipelines.extend(pipeline['pipelines'])
+
+        return Response(pipelines)
 
 class GetProjectTasks(TaskView):
     # Returns list of tasks for given project id in url

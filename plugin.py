@@ -8,7 +8,7 @@ from django import forms
 from django.views.generic.base import RedirectView
 
 from .app_views import HomeView, LoadButtonsView
-from .api_views import GetUserProjects, GetUserProjectsAndTasks, GetProjectTasks
+from .api_views import GetUserProjects, GetUserProjectsAndTasks, GetProjectTasks, GetUserPipelines
 
 import os
 host = os.environ.get('WO_HOST')
@@ -28,9 +28,10 @@ class Plugin(PluginBase):
                     #Menu("Terria", f"https://{host}/terria/", "fas fa-map"),
                   ]),
                 Menu("JupyterHub", self.public_url("jupyterhub/"), "fab fa-python", submenu=[
+                    Menu("Browser: Open projects on right  will be mounted in the selected JupyterHub instance", "#", "fas fa-folder-open icon"),
                     #Menu("JupyterHub inline", self.public_url("jupyterhub/"), "fab fa-python"),
                     Menu("JupyterHub", f"https://jupyter.{host}/", "fab fa-python"),
-                    Menu("Project Files", f"javascript:location.href = 'https://jupyter.{host}/hub/spawn?profile=exp-' + new URLSearchParams(window.location.search).get('project_task_open').replaceAll(',','-')", "fas fa-folder-open icon"),
+                    Menu("Project Files", f"javascript:open_jhub('{host}', 'exp');", "fas fa-folder-open icon"),
                     #Menu("Pipelines", "#", "fas fa-stream", submenu=[
                         Menu("Default", f"https://jupyter.{host}/hub/spawn?profile=default", "fas fa-stream"),
                         Menu("Base", f"https://jupyter.{host}/hub/spawn?profile=base", "fas fa-stream"),
@@ -71,6 +72,7 @@ class Plugin(PluginBase):
         return [
             MountPoint('userprojects', GetUserProjects.as_view()),
             MountPoint('usertasks', GetUserProjectsAndTasks.as_view()),
+            MountPoint('userpipelines', GetUserPipelines.as_view()),
             MountPoint("projects/(?P<project_pk>[^/.]+)/gettasks", GetProjectTasks.as_view()),
             #MountPoint("projects/(?P<project_pk>[^/.]+)/tasks/(?P<pk>[^/.]+)/checkforurl", CheckUrlTaskView.as_view()),
             #MountPoint('task/(?P<pk>[^/.]+)/shortlink', GetShortLink.as_view()),

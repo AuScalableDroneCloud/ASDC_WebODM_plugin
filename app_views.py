@@ -14,9 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 
 class SettingsForm(forms.Form):
-    username = forms.CharField(label='Username', required=False, max_length=1024, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
-    password = forms.CharField(label='Password', required=False, max_length=1024, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-    #registry_url = forms.CharField(label='Registry URL', required=False, max_length=1024, widget=forms.TextInput(attrs={'placeholder': 'Registry Url'}))
+    pipelines_url = forms.CharField(label='Custom pipelines repo URL(s) (comma-separated)', required=False, max_length=1024, widget=forms.TextInput(attrs={'placeholder': 'Pipelines Url'}))
 
 def HomeView(plugin):
     @login_required
@@ -27,16 +25,10 @@ def HomeView(plugin):
         if request.method == 'POST':
             form = SettingsForm(request.POST)
             if form.is_valid():
-                #ds.set_string('registry_url', form.cleaned_data['registry_url'])
-                ds.set_string('username', form.cleaned_data['username'])
-                ds.set_string('password', form.cleaned_data['password'])
-                ds.set_string('token', None)
+                ds.set_string('pipelines_url', form.cleaned_data['pipelines_url'])
                 messages.success(request, 'Settings updated.')
 
-        form = SettingsForm(initial={'username': ds.get_string('username', default=""), 
-                                     'password': ds.get_string('password', default=""), 
-                                     })
-                                     #'registry_url': ds.get_string('registry_url', default="") or DEFAULT_HUB_URL})
+        form = SettingsForm(initial={'pipelines_url': ds.get_string('pipelines_url', default="")})
 
         return render(request, plugin.template_path("app.html"), {
             'title': 'ASDC',
