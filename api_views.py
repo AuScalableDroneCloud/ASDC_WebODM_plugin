@@ -80,8 +80,8 @@ class GetUserPipelines(APIView):
 
     def get(self, request):
         pipeline_urls = []
-        if 'PIPELINE_URL' in os.environ:
-            pipeline_urls = [os.getenv('PIPELINE_URL')]
+        if 'PIPELINES_URL' in os.environ:
+            pipeline_urls = [os.getenv('PIPELINES_URL')]
 
         email = self.request.query_params.get('email', None)
         user = User.objects.get(email = email)
