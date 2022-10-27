@@ -1,2 +1,3 @@
-pyyaml==6.0
+#NOTE: plugin fails to load if these packages are not pre-installed, automated install not working
+ruamel.yaml==0.17.21
 requests

@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from app.plugins.views import TaskView
 from app.plugins import get_current_plugin
 import json
-import yaml
+import ruamel.yaml as yaml
 import requests
 import os
 
