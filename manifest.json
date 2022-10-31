@@ -1,8 +1,8 @@
 {
 	"name": "ASDC Plugin Interface",
 	"webodmMinVersion": "1.9.0",
-	"description": "Testing",
-	"version": "0.0.1",
+	"description": "Australian Scalable Drones Cloud project utilities and functionality",
+	"version": "0.1.0",
 	"author": "Owen Kaluza",
 	"email": "owen.kaluza@monash.edu",
 	"repository": "https://github.com/AuScalableDroneCloud/asdc_plugin",

@@ -6,9 +6,7 @@ from rest_framework.response import Response
 from app.plugins.views import TaskView
 from app.plugins import get_current_plugin
 import json
-import ruamel.yaml as yaml
-import requests
-import os
+from .pipelines import get_json
 
 def get_user_projects(email, detail=True):
     try:
@@ -79,24 +77,11 @@ class GetUserPipelines(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
-        pipeline_urls = []
-        if 'PIPELINES_URL' in os.environ:
-            pipeline_urls = [os.getenv('PIPELINES_URL')]
-
+        user = request.user
         email = self.request.query_params.get('email', None)
-        user = User.objects.get(email = email)
-        ds = get_current_plugin().get_user_data_store(user)
-        urls = ds.get_string('pipelines_url', default="").split(',')
-        pipeline_urls += urls
-        pipelines = []
-        for url in pipeline_urls:
-            response = requests.get(url, timeout=5)
-            if response.status_code == 200:
-                pipeline = yaml.safe_load(response.text)
-                print(pipeline)
-                pipelines.extend(pipeline['pipelines'])
-
-        return Response(pipelines)
+        if email is not None:
+            user = User.objects.get(email=email)
+        return Response(get_json(user))
 
 class GetProjectTasks(TaskView):
     # Returns list of tasks for given project id in url
@@ -120,4 +105,32 @@ class GetProjectTasks(TaskView):
         pdata = {"id": p.id, "name": p.name, "description": p.description, "tasks" : tlist}
 
         return Response(pdata)
+
+class SaveProjects(APIView):
+    # Stores passed list of user projects temporarily
+    # ROOTURL/api/plugins/asdc/saveprojects?projects=X,Y,Z
+
+    #Allow read access to anon
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request):
+        projects = self.request.query_params.get('projects', None)
+        #ds = get_current_plugin().get_user_data_store(request.user)
+        plugin = get_current_plugin()
+        plugin.saved_projects += projects.split(',')
+        #Remove duplicates
+        plugin.saved_projects = list(set(plugin.saved_projects))
+        return Response()
+
+class ClearProjects(APIView):
+    # Clear stored list of user projects
+    # ROOTURL/api/plugins/asdc/clearprojects
+
+    #Allow read access to anon
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request):
+        plugin = get_current_plugin()
+        plugin.saved_projects = []
+        return Response()
 

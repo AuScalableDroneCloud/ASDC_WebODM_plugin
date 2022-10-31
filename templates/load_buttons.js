@@ -17,7 +17,24 @@ PluginsAPI.Dashboard.addTaskActionButton(
 );*/
 
 function open_jhub(host, profile) {
-  let projects = new URLSearchParams(window.location.search).get('project_task_open').replaceAll(',','-');
-  window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '-' + projects);
+  let projects = new URLSearchParams(window.location.search).get('project_task_open'); //.replaceAll(',','-');
+  window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects);
 }
 
+function save_open_projects() {
+  let projects = new URLSearchParams(window.location.search).get('project_task_open');
+  //$.get("/api/plugins/asdc/saveprojects?projects=" + projects)
+  $.get( "/api/plugins/asdc/saveprojects?projects=" + projects, function(data) {
+    //$(".result").html( data );
+    //alert( "Load was performed." );
+    location.reload();
+  });
+}
+
+function clear_open_projects() {
+  $.get( "/api/plugins/asdc/clearprojects", function(data) {
+    //$(".result").html(data);
+    //alert( "Load was performed." );
+    location.reload();
+  });
+}
