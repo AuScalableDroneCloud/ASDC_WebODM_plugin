@@ -18,7 +18,8 @@ PluginsAPI.Dashboard.addTaskActionButton(
 
 function open_jhub(host, profile) {
   let projects = new URLSearchParams(window.location.search).get('project_task_open'); //.replaceAll(',','-');
-  window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects);
+  let tasks = new URLSearchParams(window.location.search).get('project_task_expanded'); //.replaceAll(',','-');
+  window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
 }
 
 function save_open_projects() {

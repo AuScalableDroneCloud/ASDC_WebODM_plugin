@@ -75,7 +75,7 @@ class Plugin(PluginBase):
                     #Menu("Terria", f"https://{host}/terria/", "fas fa-map"),
                   ]),
                 Menu("JupyterHub", self.public_url("jupyterhub/"), "fab fa-python", submenu=[
-                    Menu("Browser: Open projects on right  will be mounted in the selected JupyterHub instance", "#", "fas fa-folder-open icon"),
+                    Menu("Browser: Open projects on right to mount in a JupyterHub instance", "#", "fas fa-folder-open icon"),
                     #Menu("JupyterHub inline", self.public_url("jupyterhub/"), "fab fa-python"),
                     Menu("JupyterHub", f"https://jupyter.{host}/", "fab fa-python"),
                     Menu("Project Files", f"javascript:open_jhub('{host}', 'exp');", "fas fa-folder-open icon"),
