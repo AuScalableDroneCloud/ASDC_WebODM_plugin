@@ -22,44 +22,23 @@ class Plugin(PluginBase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pipelines = {}
+        #Just get the default pipelines without custom user settings
         self.saved_projects = []
 
-    def serve_public_assets(self, request):
-        """
-        Should be overriden by plugins that want to control which users
-        have access to the public assets. By default anyone can access them,
-        including anonymous users.
-        :param request: HTTP request
-        :return: boolean (whether the plugin's public assets should be exposed for this request)
-        """
-        #Using this as a horrible hack to get the pipeline list,
-        #since we get the request here, can lookup the user
-        self.pipelines = get_json(request.user)
-        return True
-
-    def main_menu(self):
-        #Super hacky way to force a request and populate pipelines in function above
-        proto = "http://" if "localhost" in host else "https://"
-        ports = "" if port == "80" else ":" + port
-        try:
-            requests.get(proto + host + ports + "/plugins/asdc/style.css")
-        except:
-            pass
-
-        #Default pipelines
-        if not self.pipelines:
-            self.pipelines = [
-                {"tag": "default", "name": "Default", "icon": "fas fa-industry"},
-                {"tag": "base", "name": "Base", "icon": "fas fa-project-diagram"},
-                {"tag": "exp", "name": "Experimental", "icon": "fas fa-stream"},
-            ]
-
+    def main_menu_user(self, user):
         submenu = []
-        for p in self.pipelines:
+        pipelines = get_json(user)
+        for p in pipelines:
             tag = p["tag"]
+            #Set the open function, will alert and abort if inputs not available
+            function = 'pipeline_run';
+            if "inputs" in p and "task" in p["inputs"]:
+                function = 'pipeline_task';
+            elif "inputs" in p and "project" in p["inputs"]:
+                function = 'pipeline_project';
+
             #submenu += [Menu(p["name"], f"https://jupyter.{host}/hub/spawn?profile={tag}", p["icon"])]
-            submenu += [Menu(p["name"], f"javascript:open_jhub('{host}', '{tag}');", p["icon"])]
+            submenu += [Menu(p["name"], f"javascript:{function}('{host}', '{tag}');", p["icon"])]
 
         prjmenu = [Menu("Add To Saved", f"javascript:save_open_projects();", "fas fa-project-diagram"),
                    Menu("Clear Saved", f"javascript:clear_open_projects();", "fas fa-trash-alt")]
@@ -70,26 +49,24 @@ class Plugin(PluginBase):
         return [#Menu("ASDC", self.public_url(""), "fas fa-road"),
                 Menu("ASDC Tools", "#", "fas fa-tools", submenu=[
                     Menu("Settings", self.public_url(""), "fas fa-cog"),
-                    Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
-                    Menu("Terria", self.public_url("terria/"), "fas fa-map"),
-                    #Menu("Terria", f"https://{host}/terria/", "fas fa-map"),
+                    Menu("JupyterHub - base", f"https://jupyter.{host}/", "fab fa-python"),
+                    Menu("JupyterHub - gpu", f"https://jupyter.{host}/", "fab fa-python"),
+                    Menu("JupyterHub - ml", f"https://jupyter.{host}/", "fab fa-python"),
+                    Menu("Project Files", f"javascript:pipeline_project('{host}', 'base');", "fas fa-folder-open icon"),
+                    #Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
+                    #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
+                    Menu("Cesium", f"https://terria.{host}/", "fas fa-globe-asia"),
+                    Menu("Terria", f"https://cesium.{host}", "fas fa-map"),
                   ]),
-                Menu("JupyterHub", self.public_url("jupyterhub/"), "fab fa-python", submenu=[
-                    Menu("Browser: Open projects on right to mount in a JupyterHub instance", "#", "fas fa-folder-open icon"),
-                    #Menu("JupyterHub inline", self.public_url("jupyterhub/"), "fab fa-python"),
-                    Menu("JupyterHub", f"https://jupyter.{host}/", "fab fa-python"),
-                    Menu("Project Files", f"javascript:open_jhub('{host}', 'exp');", "fas fa-folder-open icon"),
-                        #Menu("Custom Test", f"https://jupyter.{host}/hub/spawn?image=jupyter/minimal-notebook:hub-2.2.2&mem_limit=8196M", "fas fa-stream"),
-                  ]),
-                  Menu("Pipelines", "#", "fas fa-stream", submenu=submenu),
-                  #Menu("Saved projects", "#", "fas fa-stream", submenu=prjmenu),
+                Menu("Pipelines", "#", "fas fa-stream", submenu=submenu),
+                #Menu("Saved projects", "#", "fas fa-stream", submenu=prjmenu),
                ]
 
     def include_js_files(self):
         return ["load_buttons.js"]
 
-    def include_css_files(self):
-        return ['style.css'] #In public
+    #def include_css_files(self):
+    #    return ['style.css'] #In public
 
     def build_jsx_components(self):
         return ["OpenButton.jsx", "EditButton.jsx"]

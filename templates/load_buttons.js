@@ -10,15 +10,32 @@ PluginsAPI.Dashboard.addTaskActionButton(
  * PluginsAPI.Dashboard.addNewTaskButton(
     ['asdc/build/EditButton.js'],
     function(args, EditButton) {
+	      //if (task.available_assets !== null && task.available_assets.length > 0){
         return React.createElement(EditButton, {
             projectId: args.projectId
         });
 	  }
 );*/
 
-function open_jhub(host, profile) {
+function pipeline_project(host, profile) {
+  pipeline_run(host, profile, false, true);
+}
+
+function pipeline_task(host, profile) {
+  pipeline_run(host, profile, true, true);
+}
+
+function pipeline_run(host, profile, need_task, need_project) {
   let projects = new URLSearchParams(window.location.search).get('project_task_open'); //.replaceAll(',','-');
   let tasks = new URLSearchParams(window.location.search).get('project_task_expanded'); //.replaceAll(',','-');
+  if (need_task && (!tasks || tasks.length < 36)) {
+    alert('Please first select input task(s) for this pipeline...')
+    return;
+  }
+  if (need_project && (!projects || projects.length < 1)) {
+    alert('Please first select input project(s) for this pipeline...')
+    return;
+  }
   window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
 }
 
