@@ -11,26 +11,20 @@ from .pipelines import get_json
 def get_user_projects(email, detail=True):
     try:
         user = User.objects.get(email = email)
-        #Get users own projects
-        projects = Project.objects.filter(owner_id = user.id)
-        if detail:
-            plist = {p.id: {"name": p.name, "description": p.description, "readonly": False} for p in projects}
-        else:
-            plist = {p.id: {"readonly": False} for p in projects}
-
         #Get the shared projects this user has access to (including view only)
-        for e in user.projectuserobjectpermission_set.all():
+        plist = {}
+        for e in user.projectuserobjectpermission_set.all().order_by('id'):
             entry = {"readonly": False}
             if detail:
                 entry = {"name": e.content_object.name, "description": e.content_object.description, "readonly": False}
             if e.permission.codename == "change_project":
                 plist[e.content_object_id] = entry
-            elif e.permission.codename == "view_project" and not e.content_object_id in plist:
+            elif e.permission.codename == "view_project": # and not e.content_object_id in plist:
                 entry["readonly"] = True
                 plist[e.content_object_id] = entry
     except:
         plist = {}
-    return plist
+    return dict(sorted(plist.items()))
 
 class GetUserProjects(APIView):
     # Returns list of user projects given email address
@@ -61,8 +55,8 @@ class GetUserProjectsAndTasks(APIView):
             #Populate the tasks lists
             for p in plist:
                 #select column_name,data_type from information_schema.columns where table_name = 'app_task';
-                tasks = Task.objects.filter(project_id = p)
-                plist[p]["tasks"] = [{"id": t.id, "name": t.name} for t in tasks]
+                tasks = Task.objects.filter(project_id = p).order_by('-created_at')
+                plist[p]["tasks"] = [{"id": str(t.id), "name": t.name} for t in tasks]
 
         except:
             plist = {}
@@ -96,8 +90,8 @@ class GetProjectTasks(TaskView):
         #task_id  = str(task.id)
         try:
             #select column_name,data_type from information_schema.columns where table_name = 'app_task';
-            tasks = Task.objects.filter(project_id = project_pk)
-            tlist = [{"id": t.id, "name": t.name} for t in tasks]
+            tasks = Task.objects.filter(project_id = project_pk).order_by('-created_at')
+            tlist = [{"id": str(t.id), "name": t.name} for t in tasks]
         except:
             tlist = []
 

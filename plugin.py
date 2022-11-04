@@ -14,7 +14,6 @@ from .api_views import SaveProjects, ClearProjects
 
 import os
 host = os.environ.get('WO_HOST')
-port = os.environ.get('WO_PORT')
 from .pipelines import get_json
 import requests
 
