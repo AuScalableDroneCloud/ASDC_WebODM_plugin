@@ -25,8 +25,12 @@ def get_json(user=None):
     for url in pipeline_urls:
         response = requests.get(url, timeout=5)
         if response.status_code == 200:
-            pipeline = yaml.safe_load(response.text)
-            pipelines.extend(pipeline['pipelines'])
+            try:
+                pipeline = yaml.safe_load(response.text)
+                pipelines.extend(pipeline['pipelines'])
+            except (Exception) as e:
+                logger.error("Error parsing yaml:" + str(e))
+                pass
 
     return pipelines
 
