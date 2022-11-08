@@ -37,7 +37,7 @@ class Plugin(PluginBase):
                 function = 'pipeline_project';
 
             #submenu += [Menu(p["name"], f"https://jupyter.{host}/hub/spawn?profile={tag}", p["icon"])]
-            submenu += [Menu(p["name"], f"javascript:{function}('{host}', '{tag}');", p["icon"])]
+            submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{tag}');", p["icon"])]
 
         prjmenu = [Menu("Add To Saved", f"javascript:save_open_projects();", "fas fa-project-diagram"),
                    Menu("Clear Saved", f"javascript:clear_open_projects();", "fas fa-trash-alt")]
@@ -51,7 +51,7 @@ class Plugin(PluginBase):
                     Menu("JupyterHub - base", f"https://jupyter.{host}/", "fab fa-python"),
                     Menu("JupyterHub - gpu", f"https://jupyter.{host}/", "fab fa-python"),
                     Menu("JupyterHub - ml", f"https://jupyter.{host}/", "fab fa-python"),
-                    Menu("Project Files", f"javascript:pipeline_project('{host}', 'base');", "fas fa-folder-open icon"),
+                    Menu("Project Files", f"javascript:pipeline_project('{user.email}', '{host}', 'base');", "fas fa-folder-open icon"),
                     #Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
                     #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
                     Menu("Cesium", f"https://terria.{host}/", "fas fa-globe-asia"),

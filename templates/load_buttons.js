@@ -17,15 +17,15 @@ PluginsAPI.Dashboard.addTaskActionButton(
 	  }
 );*/
 
-function pipeline_project(host, profile) {
-  pipeline_run(host, profile, false, true);
+function pipeline_project(user, host, profile) {
+  pipeline_run(user, host, profile, false, true);
 }
 
-function pipeline_task(host, profile) {
-  pipeline_run(host, profile, true, true);
+function pipeline_task(user, host, profile) {
+  pipeline_run(user, host, profile, true, true);
 }
 
-function pipeline_run(host, profile, need_task, need_project) {
+function pipeline_run(user, host, profile, need_task, need_project) {
   let projects = new URLSearchParams(window.location.search).get('project_task_open'); //.replaceAll(',','-');
   let tasks = new URLSearchParams(window.location.search).get('project_task_expanded'); //.replaceAll(',','-');
   if (need_task && (!tasks || tasks.length < 36)) {
@@ -36,7 +36,9 @@ function pipeline_run(host, profile, need_task, need_project) {
     alert('Please first select input project(s) for this pipeline...')
     return;
   }
-  window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
+  //window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
+  //Need username to spawn a named server
+  window.open('https://jupyter.' + host + '/hub/spawn/' + user + '/' + profile + '?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
 }
 
 function save_open_projects() {
