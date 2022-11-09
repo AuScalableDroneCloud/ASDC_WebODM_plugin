@@ -36,9 +36,10 @@ function pipeline_run(user, host, profile, need_task, need_project) {
     alert('Please first select input project(s) for this pipeline...')
     return;
   }
-  //window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
+  window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
+  //DISABLE NAMED SERVERS FOR NOW - these do not work with the auth callback
   //Need username to spawn a named server
-  window.open('https://jupyter.' + host + '/hub/spawn/' + user + '/' + profile + '?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
+  //window.open('https://jupyter.' + host + '/hub/spawn/' + user + '/' + profile + '?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
 }
 
 function save_open_projects() {
