@@ -13,9 +13,8 @@ export default class OpenButton extends Component {
 
   tid = this.props.task ? this.props.task.id : '';
   pid = this.props.task ? this.props.task.project : '';
-  //handleClick = () => window.open(`https://jupyter.${location.host}//user-redirect/jupyter_oauth2/custom?project=${this.pid}&task=${this.tid}`, '_blank');
   handleClickNotebook = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?project=${this.pid}&task=${this.tid}`, '_blank');
-  handleClickFiles = () => window.open(`https://jupyter.${location.host}/hub/spawn?profile=exp-${this.pid}`, '_blank');
+  handleClickFiles = () => window.open(`https://jupyter.${location.host}/hub/spawn?projects=${this.pid}&tasks=${this.tid}`, '_blank');
 
   render() {
     return (

@@ -65,8 +65,8 @@ class Plugin(PluginBase):
     def include_js_files(self):
         return ["load_buttons.js"]
 
-    #def include_css_files(self):
-    #    return ['style.css'] #In public
+    def include_css_files(self):
+        return ['style.css'] #In public
 
     def build_jsx_components(self):
         return ["OpenButton.jsx", "EditButton.jsx"]
