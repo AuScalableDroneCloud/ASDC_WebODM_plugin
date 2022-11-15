@@ -11,6 +11,13 @@ from .pipelines import get_json
 def get_user_projects(email, detail=True):
     try:
         user = User.objects.get(email = email)
+        #Get users own projects
+        projects = Project.objects.filter(owner_id = user.id).order_by('id')
+        if detail:
+            plist = {p.id: {"name": p.name, "description": p.description, "readonly": False} for p in projects}
+        else:
+            plist = {p.id: {"readonly": False} for p in projects}
+
         #Get the shared projects this user has access to (including view only)
         plist = {}
         for e in user.projectuserobjectpermission_set.all().order_by('id'):
@@ -19,7 +26,7 @@ def get_user_projects(email, detail=True):
                 entry = {"name": e.content_object.name, "description": e.content_object.description, "readonly": False}
             if e.permission.codename == "change_project":
                 plist[e.content_object_id] = entry
-            elif e.permission.codename == "view_project": # and not e.content_object_id in plist:
+            elif e.permission.codename == "view_project" and not e.content_object_id in plist:
                 entry["readonly"] = True
                 plist[e.content_object_id] = entry
     except:
