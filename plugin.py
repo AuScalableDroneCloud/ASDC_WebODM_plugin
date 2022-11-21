@@ -55,7 +55,7 @@ class Plugin(PluginBase):
                     Menu("Project Files", f"javascript:pipeline_project('{user.email}', '{host}', 'base');", "fas fa-folder-open icon"),
                     #Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
                     #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
-                    Menu("Cesium", f"https://cesium.{host}/", "fas fa-globe-asia"),
+                    Menu("Cesium", f"https://cesium.{host}/cesium/Apps/ASDC/", "fas fa-globe-asia"),
                     Menu("Terria", f"https://terria.{host}", "fas fa-map"),
                   ]),
                 Menu("Pipelines", "#", "fas fa-stream", submenu=submenu),
