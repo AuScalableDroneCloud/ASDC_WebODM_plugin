@@ -17,11 +17,11 @@ PluginsAPI.Dashboard.addTaskActionButton(
 	  }
 );*/
 
-function pipeline_project(user, host, profile) {
+function pipeline_project(user, host, profile, image) {
   pipeline_run(user, host, profile, image, next, false, true);
 }
 
-function pipeline_task(user, host, profile) {
+function pipeline_task(user, host, profile, image) {
   pipeline_run(user, host, profile, image, next, true, true);
 }
 
