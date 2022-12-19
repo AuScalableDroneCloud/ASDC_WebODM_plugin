@@ -14,8 +14,9 @@ from .api_views import SaveProjects, ClearProjects
 
 import os
 host = os.environ.get('WO_HOST')
-from .pipelines import get_json
+from .pipelines import get_json, get_nexturl
 import requests
+import urllib.parse
 
 class Plugin(PluginBase):
 
@@ -28,7 +29,6 @@ class Plugin(PluginBase):
         submenu = []
         pipelines = get_json(user)
         for p in pipelines:
-            tag = p["tag"]
             #Set the open function, will alert and abort if inputs not available
             function = 'pipeline_run';
             if "inputs" in p and "task" in p["inputs"]:
@@ -36,8 +36,14 @@ class Plugin(PluginBase):
             elif "inputs" in p and "project" in p["inputs"]:
                 function = 'pipeline_project';
 
+            #Construct the next= url
+            tag = p["tag"]
+            image = p["image"]
+            nexturl = get_nexturl(p)
+
             #submenu += [Menu(p["name"], f"https://jupyter.{host}/hub/spawn?profile={tag}", p["icon"])]
-            submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{tag}');", p["icon"])]
+            #submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{tag}', '{image}', {nexturl});", p["icon"])]
+            submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{image}', '{image}', {nexturl});", p["icon"])]
 
         prjmenu = [Menu("Add To Saved", f"javascript:save_open_projects();", "fas fa-project-diagram"),
                    Menu("Clear Saved", f"javascript:clear_open_projects();", "fas fa-trash-alt")]

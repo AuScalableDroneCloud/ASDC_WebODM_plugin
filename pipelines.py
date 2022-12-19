@@ -1,9 +1,8 @@
 import json
 import ruamel.yaml as yaml
 import requests
+import urllib.parse
 import os
-from app.plugins import get_current_plugin
-from app.plugins import logger
 
 def get_urls(user=None):
     pipeline_urls = []
@@ -11,6 +10,7 @@ def get_urls(user=None):
         pipeline_urls = [os.getenv('PIPELINES_URL')]
 
     if user is not None:
+        from app.plugins import get_current_plugin
         ds = get_current_plugin().get_user_data_store(user)
         urls = ds.get_string('pipelines_url', "")
         if urls:
@@ -29,8 +29,46 @@ def get_json(user=None):
                 pipeline = yaml.safe_load(response.text)
                 pipelines.extend(pipeline['pipelines'])
             except (Exception) as e:
+                from app.plugins import logger
                 logger.error("Error parsing yaml:" + str(e))
                 pass
 
     return pipelines
+
+def get_nexturl(pipeline):
+    #Set the open function, will alert and abort if inputs not available
+    function = 'pipeline_run';
+    if "inputs" in pipeline and "task" in pipeline["inputs"]:
+        function = 'pipeline_task';
+    elif "inputs" in pipeline and "project" in pipeline["inputs"]:
+        function = 'pipeline_project';
+
+    #Construct the next= url
+    tag = pipeline["tag"]
+    image = pipeline["image"]
+    # - Source repository and repo checkout dest dir
+    if ':' in pipeline["source"]:
+        #Provided a full repo URL
+        repo = pipeline["source"]
+        target = tag #Use the tag as the dest dir
+        # - Entrypoint path
+        path = os.path.join(target, pipeline["entrypoint"])
+    else:
+        repo = os.getenv('PIPELINE_REPO', "https://github.com/auscalabledronecloud/pipelines-jupyter")
+        target = 'pipelines'
+        # - Entrypoint path
+        #(NOTE: can be confusing, but assumes entrypoint relative to source subdir)
+        path = os.path.join("pipelines", pipeline["source"], pipeline["entrypoint"])
+    # - Branch (optional)
+    branch = "&branch=" + pipeline["branch"] if "branch" in pipeline else ""
+    #branch = "&branch=" + (pipeline["branch"] if "branch" in p else "main") #Seems to require branch
+    # - Requirements file (optional)
+    requirements = "&requirements" + pipeline["requirements"] if "requirements" in pipeline else ""
+
+    #Encode urlpath, then re-encode entire next url
+    #(NOTE: need to replace PROJECTS and TASKS with data in js)
+    redir = urllib.parse.quote_plus(f'asdc/redirect?projects=PROJECTS&tasks=TASKS&path={path}')
+    nexturl = urllib.parse.quote_plus(f"/user-redirect/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={redir}")
+    #print(nexturl)
+    return nexturl
 

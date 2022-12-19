@@ -18,14 +18,14 @@ PluginsAPI.Dashboard.addTaskActionButton(
 );*/
 
 function pipeline_project(user, host, profile) {
-  pipeline_run(user, host, profile, false, true);
+  pipeline_run(user, host, profile, image, next, false, true);
 }
 
 function pipeline_task(user, host, profile) {
-  pipeline_run(user, host, profile, true, true);
+  pipeline_run(user, host, profile, image, next, true, true);
 }
 
-function pipeline_run(user, host, profile, need_task, need_project) {
+function pipeline_run(user, host, profile, image, next, need_task, need_project) {
   let projects = new URLSearchParams(window.location.search).get('project_task_open'); //.replaceAll(',','-');
   let tasks = new URLSearchParams(window.location.search).get('project_task_expanded'); //.replaceAll(',','-');
   if (need_task && (!tasks || tasks.length < 36)) {
@@ -36,10 +36,20 @@ function pipeline_run(user, host, profile, need_task, need_project) {
     alert('Please first select input project(s) for this pipeline...')
     return;
   }
-  window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
-  //DISABLE NAMED SERVERS FOR NOW - these do not work with the auth callback
-  //Need username to spawn a named server
-  //window.open('https://jupyter.' + host + '/hub/spawn/' + user + '/' + profile + '?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks);
+
+  if (next) {
+    //Replace the placeholders with data
+    next = next.replace("PROJECTS", projects || '')
+    next = next.replace("TASKS", tasks || '')
+  }
+
+  if (image && user) {
+    //Need username to spawn a named server
+    window.open('https://jupyter.' + host + '/hub/spawn/' + user + '/' + image + '?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
+  } else {
+    //Just open the default server
+    window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
+  }
 }
 
 function save_open_projects() {
