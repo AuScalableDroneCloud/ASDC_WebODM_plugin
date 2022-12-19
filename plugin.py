@@ -42,8 +42,8 @@ class Plugin(PluginBase):
             nexturl = get_nexturl(p)
 
             #submenu += [Menu(p["name"], f"https://jupyter.{host}/hub/spawn?profile={tag}", p["icon"])]
-            #submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{tag}', '{image}', {nexturl});", p["icon"])]
-            submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{image}', '{image}', {nexturl});", p["icon"])]
+            #submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{tag}', '{image}', '{nexturl}');", p["icon"])]
+            submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{image}', '{image}', '{nexturl}');", p["icon"])]
 
         prjmenu = [Menu("Add To Saved", f"javascript:save_open_projects();", "fas fa-project-diagram"),
                    Menu("Clear Saved", f"javascript:clear_open_projects();", "fas fa-trash-alt")]
