@@ -46,6 +46,8 @@ def get_nexturl(pipeline):
     #Construct the next= url
     tag = pipeline["tag"]
     image = pipeline["image"]
+    branch = ""
+    requirements = ""
     # - Source repository and repo checkout dest dir
     if ':' in pipeline["source"]:
         #Provided a full repo URL
@@ -53,22 +55,28 @@ def get_nexturl(pipeline):
         target = tag #Use the tag as the dest dir
         # - Entrypoint path
         path = os.path.join(target, pipeline["entrypoint"])
+        # - Requirements file (optional)
+        if "requirements" in pipeline:
+            requirements = "&requirements" + pipeline["requirements"]
     else:
         repo = os.getenv('PIPELINE_REPO', "https://github.com/auscalabledronecloud/pipelines-jupyter")
         target = 'pipelines'
         # - Entrypoint path
         #(NOTE: can be confusing, but assumes entrypoint relative to source subdir)
         path = os.path.join("pipelines", pipeline["source"], pipeline["entrypoint"])
+        # - Requirements file (optional)
+        if "requirements" in pipeline:
+            #Same with requirements, assumes relative to source subdir
+            requirements = "&requirements" + os.path.join(pipeline["source"], pipeline["requirements"])
     # - Branch (optional)
-    branch = "&branch=" + pipeline["branch"] if "branch" in pipeline else ""
+    if "branch" in pipeline:
+        branch = "&branch=" + pipeline["branch"]
     #branch = "&branch=" + (pipeline["branch"] if "branch" in p else "main") #Seems to require branch
-    # - Requirements file (optional)
-    requirements = "&requirements" + pipeline["requirements"] if "requirements" in pipeline else ""
 
     #Encode urlpath, then re-encode entire next url
     #(NOTE: need to replace PROJECTS and TASKS with data in js)
     redir = urllib.parse.quote_plus(f'asdc/redirect?projects=PROJECTS&tasks=TASKS&path={path}')
     nexturl = urllib.parse.quote_plus(f"/user-redirect/{image}/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={redir}")
-    #print(nexturl)
+    print("NEXTURL: ", nexturl)
     return nexturl
 
