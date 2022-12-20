@@ -45,9 +45,11 @@ function pipeline_run(user, host, profile, image, next, need_task, need_project)
 
   if (image && user) {
     //Need username to spawn a named server
+    console.log('NAMED: https://jupyter.' + host + '/hub/spawn/' + user + '/' + image + '?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
     window.open('https://jupyter.' + host + '/hub/spawn/' + user + '/' + image + '?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
   } else {
     //Just open the default server
+    console.log('DEFAULT: https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
     window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
   }
 }
