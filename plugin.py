@@ -39,7 +39,7 @@ class Plugin(PluginBase):
             #Construct the next= url
             tag = p["tag"]
             image = p["image"]
-            nexturl = get_nexturl(p)
+            nexturl = get_nexturl(p, user.name)
 
             #submenu += [Menu(p["name"], f"https://jupyter.{host}/hub/spawn?profile={tag}", p["icon"])]
             #submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{tag}', '{image}', '{nexturl}');", p["icon"])]

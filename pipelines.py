@@ -35,7 +35,7 @@ def get_json(user=None):
 
     return pipelines
 
-def get_nexturl(pipeline):
+def get_nexturl(pipeline, username):
     #Set the open function, will alert and abort if inputs not available
     function = 'pipeline_run';
     if "inputs" in pipeline and "task" in pipeline["inputs"]:
@@ -68,7 +68,7 @@ def get_nexturl(pipeline):
     #Encode urlpath, then re-encode entire next url
     #(NOTE: need to replace PROJECTS and TASKS with data in js)
     redir = urllib.parse.quote_plus(f'asdc/redirect?projects=PROJECTS&tasks=TASKS&path={path}')
-    nexturl = urllib.parse.quote_plus(f"/hub/user-redirect/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={redir}")
+    nexturl = urllib.parse.quote_plus(f"/user/{username}/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={redir}")
     #print(nexturl)
     return nexturl
 
