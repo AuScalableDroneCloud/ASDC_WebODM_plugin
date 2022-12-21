@@ -91,5 +91,7 @@ def get_fullurl(pipeline, username):
     nexturl = get_nexturl(pipeline)
     image = pipeline['image']
     fullurl = f'https://jupyter.{host}/hub/spawn/{username}/{image}?profile={image}&next={nexturl}'
+    #Fix for react bug, it decodes the url when rendering so encode again to counter this
+    fullurl = urllib.parse.quote_plus(fullurl)
     return fullurl
 
