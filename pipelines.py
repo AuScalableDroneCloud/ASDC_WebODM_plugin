@@ -57,7 +57,7 @@ def get_nexturl(pipeline):
         path = os.path.join(target, pipeline["entrypoint"])
         # - Requirements file (optional)
         if "requirements" in pipeline:
-            requirements = "&requirements" + pipeline["requirements"]
+            requirements = "&requirements=" + pipeline["requirements"]
     else:
         repo = os.getenv('PIPELINE_REPO', "https://github.com/auscalabledronecloud/pipelines-jupyter")
         target = 'pipelines'
@@ -67,7 +67,7 @@ def get_nexturl(pipeline):
         # - Requirements file (optional)
         if "requirements" in pipeline:
             #Same with requirements, assumes relative to source subdir
-            requirements = "&requirements" + os.path.join(pipeline["source"], pipeline["requirements"])
+            requirements = "&requirements=" + os.path.join(pipeline["source"], pipeline["requirements"])
     # - Branch (optional)
     if "branch" in pipeline:
         branch = "&branch=" + pipeline["branch"]
@@ -75,23 +75,18 @@ def get_nexturl(pipeline):
 
     #Encode urlpath, then re-encode entire next url
     #(NOTE: need to replace PROJECTS and TASKS with data in js)
-    #from app.plugins import logger
-    urlpath = f'asdc/redirect?projects=PROJECTS&tasks=TASKS&path={path}'
-    urlpath = urllib.parse.quote_plus(urlpath)
-    nexturl = f"/user-redirect/{image}/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={urlpath}"
-    #logger.info("NEXTURL0: " + str(nexturl))
-    nexturl = urllib.parse.quote_plus(nexturl)
-    #logger.info("NEXTURL1: " + str(nexturl))
-    print("NEXTURL: ", nexturl)
+    urlpath = urllib.parse.quote_plus(f'asdc/redirect?projects=PROJECTS&tasks=TASKS&path={path}')
+    nexturl = urllib.parse.quote_plus(f"/user-redirect/{image}/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={urlpath}")
     return nexturl
 
-def get_fullurl(pipeline, username):
+def get_fullurl(pipeline, username, encode_again=True):
     import os
     host = os.environ.get('WO_HOST')
     nexturl = get_nexturl(pipeline)
     image = pipeline['image']
     fullurl = f'https://jupyter.{host}/hub/spawn/{username}/{image}?profile={image}&next={nexturl}'
-    #Fix for react bug, it decodes the url when rendering so encode again to counter this
-    fullurl = urllib.parse.quote_plus(fullurl)
+    #Fix for reac, encode_again=Truet bug, it decodes the url when rendering so encode again to counter this
+    if encode_again:
+        fullurl = urllib.parse.quote_plus(fullurl)
     return fullurl
 
