@@ -75,8 +75,21 @@ def get_nexturl(pipeline):
 
     #Encode urlpath, then re-encode entire next url
     #(NOTE: need to replace PROJECTS and TASKS with data in js)
-    redir = urllib.parse.quote_plus(f'asdc/redirect?projects=PROJECTS&tasks=TASKS&path={path}')
-    nexturl = urllib.parse.quote_plus(f"/user-redirect/{image}/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={redir}")
+    #from app.plugins import logger
+    urlpath = f'asdc/redirect?projects=PROJECTS&tasks=TASKS&path={path}'
+    urlpath = urllib.parse.quote_plus(urlpath)
+    nexturl = f"/user-redirect/{image}/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={urlpath}"
+    #logger.info("NEXTURL0: " + str(nexturl))
+    nexturl = urllib.parse.quote_plus(nexturl)
+    #logger.info("NEXTURL1: " + str(nexturl))
     print("NEXTURL: ", nexturl)
     return nexturl
+
+def get_fullurl(pipeline, username):
+    import os
+    host = os.environ.get('WO_HOST')
+    nexturl = get_nexturl(pipeline)
+    image = pipeline['image']
+    fullurl = f'https://jupyter.{host}/hub/spawn/{username}/{image}?profile={image}&next={nexturl}'
+    return fullurl
 

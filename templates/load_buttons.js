@@ -17,15 +17,15 @@ PluginsAPI.Dashboard.addTaskActionButton(
 	  }
 );*/
 
-function pipeline_project(user, host, profile, image, next) {
-  pipeline_run(user, host, profile, image, next, false, true);
+function pipeline_project(url) {
+  pipeline_run(url, false, true);
 }
 
-function pipeline_task(user, host, profile, image, next) {
-  pipeline_run(user, host, profile, image, next, true, true);
+function pipeline_task(url) {
+  pipeline_run(url, true, true);
 }
 
-function pipeline_run(user, host, profile, image, next, need_task, need_project) {
+function pipeline_run(url, need_task, need_project) {
   let projects = new URLSearchParams(window.location.search).get('project_task_open'); //.replaceAll(',','-');
   let tasks = new URLSearchParams(window.location.search).get('project_task_expanded'); //.replaceAll(',','-');
   if (need_task && (!tasks || tasks.length < 36)) {
@@ -37,24 +37,12 @@ function pipeline_run(user, host, profile, image, next, need_task, need_project)
     return;
   }
 
-  if (next) {
-    //Replace the placeholders with data
-    next = next.replace("PROJECTS", projects || '')
-    next = next.replace("TASKS", tasks || '')
-  }
+  //Replace the placeholders with data
+  url = url.replace("PROJECTS", projects || '')
+  url = url.replace("TASKS", tasks || '')
 
-  if (image && user) {
-    //Need username to spawn a named server
-    //console.log('NAMED: https://jupyter.' + host + '/hub/spawn/' + user + '/' + image + '?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
-    //window.open('https://jupyter.' + host + '/hub/spawn/' + user + '/' + image + '?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
-    console.log("NEXTURL: " + next);
-    console.log('NAMED: https://jupyter.' + host + '/hub/spawn/' + user + '/' + image + '?profile=' + profile + '&next=' + next);
-    window.open('https://jupyter.' + host + '/hub/spawn/' + user + '/' + image + '?profile=' + profile + '&next=' + next);
-  } else {
-    //Just open the default server
-    console.log('DEFAULT: https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
-    window.open('https://jupyter.' + host + '/hub/spawn?profile=' + profile + '&projects=' + projects + '&tasks=' + tasks + '&next=' + next);
-  }
+  console.log("URL: " + url);
+  window.open(url)
 }
 
 function save_open_projects() {
