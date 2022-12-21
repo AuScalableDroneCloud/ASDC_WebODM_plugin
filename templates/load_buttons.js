@@ -38,8 +38,8 @@ function pipeline_run(url, need_task, need_project) {
   }
 
   //Replace the placeholders with data
-  url = url.replace("PROJECTS", projects || '')
-  url = url.replace("TASKS", tasks || '')
+  url = url.replaceAll("PROJECTS", projects || '')
+  url = url.replaceAll("TASKS", tasks || '')
 
   console.log("URL: " + url);
   window.open(url)

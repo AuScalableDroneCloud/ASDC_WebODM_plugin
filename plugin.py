@@ -39,14 +39,8 @@ class Plugin(PluginBase):
             #Construct the next= url
             tag = p["tag"]
             image = p["image"]
-            #nexturl = get_nexturl(p)
             fullurl = get_fullurl(p, user.email)
-
-            #submenu += [Menu(p["name"], f"https://jupyter.{host}/hub/spawn?profile={tag}", p["icon"])]
-            #submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{tag}', '{image}', '{nexturl}');", p["icon"])]
-            #submenu += [Menu(p["name"], f"javascript:{function}('{user.email}', '{host}', '{image}', '{image}', '{nexturl}');", p["icon"])]
             submenu += [Menu(p["name"], f"javascript:{function}('{fullurl}');", p["icon"])]
-            #submenu += [Menu(p["name"], self.public_url(f"/pipeline/{p['name']}"), p["icon"])]
 
         prjmenu = [Menu("Add To Saved", f"javascript:save_open_projects();", "fas fa-project-diagram"),
                    Menu("Clear Saved", f"javascript:clear_open_projects();", "fas fa-trash-alt")]
@@ -61,7 +55,7 @@ class Plugin(PluginBase):
                     Menu("JupyterHub - base", f"https://jupyter.{host}/hub/spawn/{user.email}/base?profile=base", "fab fa-python"),
                     Menu("JupyterHub - gpu", f"https://jupyter.{host}/hub/spawn/{user.email}/gpu?profile=gpu", "fab fa-python"),
                     Menu("JupyterHub - ml", f"https://jupyter.{host}/hub/spawn/{user.email}/ml?profile=ml", "fab fa-python"),
-                    Menu("Project Files", f"javascript:pipeline_project('https://jupyter.{host}/hub/spawn?profile=base&projects=PROJECTS&tasks=TASKS');", "fas fa-folder-open icon"),
+                    Menu("Project Files", f"javascript:pipeline_project('https://jupyter.{host}/hub/spawn?profile=base&projects=PROJECTS');", "fas fa-folder-open icon"),
                     #Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
                     #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
                     Menu("Cesium", f"https://cesium.{host}/cesium/Apps/ASDC/", "fas fa-globe-asia"),

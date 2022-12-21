@@ -5,13 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
 from app.plugins import logger
-
-from django.contrib import messages
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django import forms
 
 class SettingsForm(forms.Form):
     pipelines_url = forms.CharField(label='Custom pipelines repo URL(s) (comma-separated)', required=False, max_length=1024, widget=forms.TextInput(attrs={'placeholder': 'Pipelines Url'}))
@@ -51,3 +45,4 @@ def LoadButtonsView(plugin):
         )
 
     return view
+

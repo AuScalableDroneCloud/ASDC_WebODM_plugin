@@ -79,12 +79,17 @@ def get_nexturl(pipeline):
     nexturl = urllib.parse.quote_plus(f"/user-redirect/{image}/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={urlpath}")
     return nexturl
 
-def get_fullurl(pipeline, username, encode_again=True):
+def get_fullurl(pipeline, username, use_mounts=True, encode_again=True):
     import os
     host = os.environ.get('WO_HOST')
     nexturl = get_nexturl(pipeline)
     image = pipeline['image']
-    fullurl = f'https://jupyter.{host}/hub/spawn/{username}/{image}?profile={image}&next={nexturl}'
+    mounts = ""
+    if use_mounts:
+        #If projects passed in to spawner, will be mounted
+        mounts = "&projects=PROJECTS"
+        #mounts = "&projects=PROJECTS&tasks=TASKS"
+    fullurl = f'https://jupyter.{host}/hub/spawn/{username}/{image}?profile={image}{mounts}&next={nexturl}'
     #Fix for reac, encode_again=Truet bug, it decodes the url when rendering so encode again to counter this
     if encode_again:
         fullurl = urllib.parse.quote_plus(fullurl)
