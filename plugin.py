@@ -55,7 +55,7 @@ class Plugin(PluginBase):
                     Menu("JupyterHub - base", f"https://jupyter.{host}/hub/spawn/{user.email}/base?profile=base", "fab fa-python"),
                     Menu("JupyterHub - gpu", f"https://jupyter.{host}/hub/spawn/{user.email}/gpu?profile=gpu", "fab fa-python"),
                     Menu("JupyterHub - ml", f"https://jupyter.{host}/hub/spawn/{user.email}/ml?profile=ml", "fab fa-python"),
-                    Menu("Project Files", f"javascript:pipeline_project('https://jupyter.{host}/hub/spawn?profile=base&projects=PROJECTS');", "fas fa-folder-open icon"),
+                    Menu("Project Files", f"javascript:file_browser('{host}', '{user.email}');", "fas fa-folder-open icon"),
                     #Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
                     #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
                     Menu("Cesium", f"https://cesium.{host}/cesium/Apps/ASDC/", "fas fa-globe-asia"),

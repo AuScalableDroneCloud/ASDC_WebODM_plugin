@@ -17,6 +17,34 @@ PluginsAPI.Dashboard.addTaskActionButton(
 	  }
 );*/
 
+function file_browser(url, user) {
+  let projects = new URLSearchParams(window.location.search).get('project_task_open');
+  if (!projects || projects.length < 1) {
+    alert('Please select project(s) to browse on right...')
+    return;
+  }
+  //SEE: https://jupyterhub.readthedocs.io/en/0.8.1/_static/rest-api/index.html
+  killurl = `https://jupyter.${host}/hub/api/users/${user}/server`;
+  //NOTE: @ in username may need encoding
+  //https://jupyter.asdc.cloud.edu.au/hub/api/users/USERNAME/server
+  //https://jupyter.asdc.cloud.edu.au/hub/api/users/USERNAME/servers/base
+  spawnurl = `https://jupyter.${host}/hub/spawn?profile=base&projects=${projects}`;
+  console.log("URL: " + spawnurl);
+  console.log("KILLURL: " + killurl);
+  //First shutdown any existing server
+  $.ajax({
+    url: killurl,
+    type: 'DELETE',
+    success: function(result) {
+      console.log("DELETED!");
+      window.open(spawnurl)
+      //$(".result").html(result);
+      //alert( "Load was performed." );
+      //location.reload();
+    }
+  });
+}
+
 function pipeline_project(url) {
   pipeline_run(url, false, true);
 }
