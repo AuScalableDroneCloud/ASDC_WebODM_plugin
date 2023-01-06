@@ -17,7 +17,7 @@ PluginsAPI.Dashboard.addTaskActionButton(
 	  }
 );*/
 
-function file_browser(url, user) {
+function file_browser(host, user) {
   let projects = new URLSearchParams(window.location.search).get('project_task_open');
   if (!projects || projects.length < 1) {
     alert('Please select project(s) to browse on right...')
