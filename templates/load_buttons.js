@@ -92,3 +92,46 @@ function clear_open_projects() {
     location.reload();
   });
 }
+
+function clear_old_storage() {
+  console.log('Storage quota exceeded, removing old tus entries')
+  //30 days ago and older
+  var expiry = new Date().getTime() - (30 * 24 * 60 * 60 * 1000);
+  for (var i = 0; i < localStorage.length; i++) {
+    let key = localStorage.key(i);
+    let val = localStorage.getItem(key);
+    if (new Date(val.creationTime) < expiry) {
+      console.log("Removing " + key);
+      localStorage.removeItem(key);
+    }
+  }
+}
+
+//Clear expired localStorage entries from TUS if full
+try {
+  console.log('Checking localStorage...');
+  let hasStorage = 'localStorage' in window
+
+  // Attempt to store and read entries from the local storage
+  const key = 'storageCheck'
+  localStorage.setItem(key, 'asdc'.repeat(1000));
+  localStorage.removeItem(key)
+  console.log('done.');
+} catch (e) {
+  // If we try to access localStorage inside a sandboxed iframe, a SecurityError
+  // is thrown. When in private mode on iOS Safari, a QuotaExceededError is
+  // thrown (see #49)
+  if (e.code === e.QUOTA_EXCEEDED_ERR) {
+    clear_old_storage();
+  } else {
+    throw e
+  }
+}
+
+//tus::tus-uppy-p1100077/jpg-1e-image/jpeg-4985344-1600850799723-https://tusd.asdc.cloud.edu.au/files/::126748795151:
+//"{"size":4985344,
+//  "metadata":{"relativePath":null,"name":"P1100077.JPG","type":"image/jpeg","filetype":"image/jpeg","filename":"P1100077.JPG"},
+//  "creationTime":"Wed Jul 27 2022 17:29:29 GMT+1000 (Australian Eastern Standard Time)",
+//  "uploadUrl":"https://tusd.asdc.cloud.edu.au/files/857076892a1159d8c2373107c85d2885"
+//  }"
+
