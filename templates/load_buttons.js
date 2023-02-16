@@ -17,6 +17,10 @@ PluginsAPI.Dashboard.addTaskActionButton(
 	  }
 );*/
 
+function open_url(url) {
+  window.open(url);
+}
+
 function file_browser(host, user) {
   let projects = new URLSearchParams(window.location.search).get('project_task_open');
   if (!projects || projects.length < 1) {
