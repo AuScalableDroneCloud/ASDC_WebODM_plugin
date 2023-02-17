@@ -18,6 +18,8 @@ PluginsAPI.Dashboard.addTaskActionButton(
 );*/
 
 function open_url(url) {
+  let projects = new URLSearchParams(window.location.search).get('project_task_open');
+  url = url.replaceAll("PROJECTS", projects || '')
   window.open(url);
 }
 
