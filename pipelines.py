@@ -82,6 +82,7 @@ def get_nexturl(pipeline):
 def get_fullurl(pipeline, username, use_mounts=True, encode_again=True, image=None):
     import os
     host = os.environ.get('WO_HOST')
+    nexturl = ''
     if pipeline:
         nexturl = '&next=' + get_nexturl(pipeline)
         image = pipeline['image']
