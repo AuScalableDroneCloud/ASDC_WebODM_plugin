@@ -57,9 +57,9 @@ class Plugin(PluginBase):
                     #Menu("JupyterHub - base", f"javascript:open_url('https://jupyter.{host}/hub/spawn/{user.email}/base?profile=base');", "fab fa-python"),
                     #Menu("JupyterHub - gpu", f"javascript:open_url('https://jupyter.{host}/hub/spawn/{user.email}/gpu?profile=gpu');", "fab fa-python"),
                     #Menu("JupyterHub - ml", f"javascript:open_url('https://jupyter.{host}/hub/spawn/{user.email}/ml?profile=ml');", "fab fa-python"),
-                    Menu("JupyterHub - base", f"javascript:open_url('{base_url}');", "fab fa-python")
-                    Menu("JupyterHub - gpu", f"javascript:open_url('{gpu_url}');", "fab fa-python")
-                    Menu("JupyterHub - ml", f"javascript:open_url('{ml_url}');", "fab fa-python")
+                    Menu("JupyterHub - base", f"javascript:open_url('{base_url}');", "fab fa-python"),
+                    Menu("JupyterHub - gpu", f"javascript:open_url('{gpu_url}');", "fab fa-python"),
+                    Menu("JupyterHub - ml", f"javascript:open_url('{ml_url}');", "fab fa-python"),
                     Menu("Project Files", f"javascript:file_browser('{host}', '{user.email}');", "fas fa-folder-open icon"),
                     #Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
                     #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
