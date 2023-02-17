@@ -15,8 +15,9 @@ export default class OpenButton extends Component {
   pid = this.props.task ? this.props.task.project : '';
   tname = this.props.task ? this.props.task.name : '';
   next = encodeURIComponent(`/user-redirect/asdc/browse?project=${this.pid}&task=${this.tid}`);
-  profile = 'base'; //TODO: profile selection?
-  handleClickNotebook = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=${this.profile}&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
+  handleClickNotebook = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
+  //profile = 'base'; //TODO: profile selection?
+  //handleClickNotebook = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=${this.profile}&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
   handleClickFiles = () => window.open(`https://jupyter.${location.host}/hub/spawn?projects=${this.pid}&tasks=${this.tid}&next=${this.next}`, '_blank');
 
   render() {
