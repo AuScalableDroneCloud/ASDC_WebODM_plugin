@@ -29,7 +29,7 @@ function file_browser(host, user) {
     alert('Please select project(s) to browse on right...')
     return;
   }
-  spawnurl = `https://jupyter.${host}/hub/spawn?profile=base&projects=${projects}`;
+  spawnurl = `https://jupyter.${host}/hub/spawn?profile=base&projects=${projects}&next=encodeURIComponent('/user-redirect/lab/tree/projects')`;
   window.open(spawnurl)
   /*
   //SEE: https://jupyterhub.readthedocs.io/en/0.8.1/_static/rest-api/index.html
