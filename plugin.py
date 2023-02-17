@@ -48,15 +48,18 @@ class Plugin(PluginBase):
             prjmenu += [Menu("PRJ " + p, "#", "fas fa-project-diagram")]
 
         #Icons: https://fontawesome.com/v5/search?m=free
+        base_url = get_fullurl(None, user.email, image="base")
+        gpu_url = get_fullurl(None, user.email, image="gpu")
+        ml_url = get_fullurl(None, user.email, image="ml")
         return [#Menu("ASDC", self.public_url(""), "fas fa-road"),
                 Menu("ASDC Tools", "#", "fas fa-tools", submenu=[
                     Menu("Settings", self.public_url(""), "fas fa-cog"),
                     #Menu("JupyterHub - base", f"javascript:open_url('https://jupyter.{host}/hub/spawn/{user.email}/base?profile=base');", "fab fa-python"),
                     #Menu("JupyterHub - gpu", f"javascript:open_url('https://jupyter.{host}/hub/spawn/{user.email}/gpu?profile=gpu');", "fab fa-python"),
                     #Menu("JupyterHub - ml", f"javascript:open_url('https://jupyter.{host}/hub/spawn/{user.email}/ml?profile=ml');", "fab fa-python"),
-                    Menu("JupyterHub - base", f"""javascript:open_url('{get_fullurl(None, user.email, image="base")}');""", "fab fa-python")
-                    Menu("JupyterHub - gpu", f"""javascript:open_url('{get_fullurl(None, user.email, image="gpu")}');""", "fab fa-python")
-                    Menu("JupyterHub - ml", f"""javascript:open_url('{get_fullurl(None, user.email, image="ml")}');""", "fab fa-python")
+                    Menu("JupyterHub - base", f"javascript:open_url('{base_url}');", "fab fa-python")
+                    Menu("JupyterHub - gpu", f"javascript:open_url('{gpu_url}');", "fab fa-python")
+                    Menu("JupyterHub - ml", f"javascript:open_url('{ml_url}');", "fab fa-python")
                     Menu("Project Files", f"javascript:file_browser('{host}', '{user.email}');", "fas fa-folder-open icon"),
                     #Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
                     #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
