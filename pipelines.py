@@ -46,7 +46,8 @@ def get_nexturl(pipeline):
     #Construct the next= url
     tag = pipeline["tag"]
     image = pipeline["image"]
-    branch = ""
+    p_branch = ""
+    d_branch = "development"
     requirements = ""
     # - Source repository and repo checkout dest dir
     if ':' in pipeline["source"]:
@@ -70,8 +71,22 @@ def get_nexturl(pipeline):
             requirements = "&requirements=" + os.path.join(pipeline["source"], pipeline["requirements"])
     # - Branch (optional)
     if "branch" in pipeline:
-        branch = "&branch=" + pipeline["branch"]
-    #branch = "&branch=" + (pipeline["branch"] if "branch" in p else "main") #Seems to require branch
+        B = pipeline["branch"]
+        if not isinstance(B, str) and len(B) > 1:
+            #Production = B[0], development = B[1]
+            p_branch = B[0]
+            d_branch = B[1]
+        else:
+            p_branch = d_branch = B
+
+    #Select branch based on dev/prod env
+    if os.getenv('ASDC_ENV', "") == "PRODUCTION":
+        branch = p_branch
+    else:
+        branch = d_branch
+            branch = "development"
+    if len(branch):
+        branch = "&branch=" + branch
 
     #Encode urlpath, then re-encode entire next url
     #(NOTE: need to replace PROJECTS and TASKS with data in js)
