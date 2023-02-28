@@ -84,7 +84,7 @@ def get_nexturl(pipeline):
         branch = p_branch
     else:
         branch = d_branch
-            branch = "development"
+
     if len(branch):
         branch = "&branch=" + branch
 
