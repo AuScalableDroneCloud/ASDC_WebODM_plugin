@@ -48,9 +48,11 @@ class Plugin(PluginBase):
             prjmenu += [Menu("PRJ " + p, "#", "fas fa-project-diagram")]
 
         #Icons: https://fontawesome.com/v5/search?m=free
-        base_url = get_fullurl(None, user.email, image="base")
-        gpu_url = get_fullurl(None, user.email, image="gpu")
-        ml_url = get_fullurl(None, user.email, image="ml")
+        #def_pipeline = None
+        def_pipeline = "dev" #Use a default pipeline instead
+        base_url = get_fullurl(def_pipeline, user.email, image="base")
+        gpu_url = get_fullurl(def_pipeline, user.email, image="gpu")
+        ml_url = get_fullurl(def_pipeline, user.email, image="ml")
         return [#Menu("ASDC", self.public_url(""), "fas fa-road"),
                 Menu("ASDC Tools", "#", "fas fa-tools", submenu=[
                     Menu("Settings", self.public_url(""), "fas fa-cog"),

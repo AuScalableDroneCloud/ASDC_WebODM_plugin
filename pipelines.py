@@ -87,6 +87,7 @@ def get_fullurl(pipeline, username, use_mounts=True, encode_again=True, image=No
         nexturl = get_nexturl(pipeline)
         image = pipeline['image']
     else:
+        #This is broken, causes jupyterlab paths go wack
         nexturl = urllib.parse.quote_plus(f'/user-redirect/{image}/asdc/redirect?projects=PROJECTS')
     mounts = ""
     if use_mounts:
