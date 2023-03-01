@@ -38,11 +38,11 @@ def get_json(user=None):
 def get_nexturl(pipeline=None):
     if pipeline is None:
         #Defaults to pulling the pipelines repo, but not opening any notebook
-        pipeline = {"name": "Default"
-                    "tag": "dev"
-                    "source": 'dev'
-                    "image": 'base'
-                    "entrypoint": ""
+        pipeline = {'name': 'Default',
+                    'tag': 'dev',
+                    'source': 'dev',
+                    'image': 'base',
+                    'entrypoint': '',
                     }
 
     #Construct the next= url
