@@ -35,16 +35,7 @@ def get_json(user=None):
 
     return pipelines
 
-def get_nexturl(pipeline=None):
-    if pipeline is None:
-        #Defaults to pulling the pipelines repo, but not opening any notebook
-        pipeline = {'name': 'Default',
-                    'tag': 'dev',
-                    'source': 'dev',
-                    'image': 'base',
-                    'entrypoint': '',
-                    }
-
+def get_nexturl(pipeline):
     #Construct the next= url
     tag = pipeline["tag"]
     image = pipeline["image"]
@@ -82,7 +73,15 @@ def get_nexturl(pipeline=None):
     return nexturl
 
 def get_fullurl(pipeline, username, use_mounts=True, encode_again=True, image=None):
-    import os
+    if pipeline is None:
+        #Defaults to pulling the pipelines repo, but not opening any notebook
+        pipeline = {'name': 'Default',
+                    'tag': 'dev',
+                    'source': 'dev',
+                    'image': 'base',
+                    'entrypoint': '',
+                    }
+
     host = os.environ.get('WO_HOST')
     nexturl = ''
     nexturl = get_nexturl(pipeline)
