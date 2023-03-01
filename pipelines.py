@@ -35,13 +35,15 @@ def get_json(user=None):
 
     return pipelines
 
-def get_nexturl(pipeline):
-    #Set the open function, will alert and abort if inputs not available
-    function = 'pipeline_run';
-    if "inputs" in pipeline and "task" in pipeline["inputs"]:
-        function = 'pipeline_task';
-    elif "inputs" in pipeline and "project" in pipeline["inputs"]:
-        function = 'pipeline_project';
+def get_nexturl(pipeline=None):
+    if pipeline is None:
+        #Defaults to pulling the pipelines repo, but not opening any notebook
+        pipeline = {"name": "Default"
+                    "tag": "dev"
+                    "source": 'dev'
+                    "image": 'base'
+                    "entrypoint": ""
+                    }
 
     #Construct the next= url
     tag = pipeline["tag"]
@@ -83,12 +85,8 @@ def get_fullurl(pipeline, username, use_mounts=True, encode_again=True, image=No
     import os
     host = os.environ.get('WO_HOST')
     nexturl = ''
-    if pipeline:
-        nexturl = get_nexturl(pipeline)
-        image = pipeline['image']
-    else:
-        #This is broken, causes jupyterlab paths go wack
-        nexturl = urllib.parse.quote_plus(f'/user-redirect/{image}/asdc/redirect?projects=PROJECTS')
+    nexturl = get_nexturl(pipeline)
+    image = pipeline['image']
     mounts = ""
     if use_mounts:
         #If projects passed in to spawner, will be mounted
