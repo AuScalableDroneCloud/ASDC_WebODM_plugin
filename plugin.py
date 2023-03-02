@@ -79,7 +79,7 @@ class Plugin(PluginBase):
         return ['style.css'] #In public
 
     def build_jsx_components(self):
-        return ["OpenButton.jsx", "EditButton.jsx"]
+        return ["OpenButton.jsx"]
 
     def app_mount_points(self):
         return [

@@ -5,18 +5,6 @@ PluginsAPI.Dashboard.addTaskActionButton(
     }
 );
 
-/*
- * Disabled now in favour of a side menu button to mount the selected projects
- * PluginsAPI.Dashboard.addNewTaskButton(
-    ['asdc/build/EditButton.js'],
-    function(args, EditButton) {
-	      //if (task.available_assets !== null && task.available_assets.length > 0){
-        return React.createElement(EditButton, {
-            projectId: args.projectId
-        });
-	  }
-);*/
-
 function open_url(url) {
   let projects = new URLSearchParams(window.location.search).get('project_task_open');
   url = url.replaceAll("PROJECTS", projects || '')
