@@ -27,6 +27,8 @@ class Plugin(PluginBase):
 
     def main_menu_user(self, user):
         submenu = []
+        if not user.is_authenticated:
+            return []
         pipelines = get_json(user)
         for p in pipelines:
             #Set the open function, will alert and abort if inputs not available

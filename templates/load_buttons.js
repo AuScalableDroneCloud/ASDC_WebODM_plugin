@@ -1,7 +1,10 @@
 PluginsAPI.Dashboard.addTaskActionButton(
     ['asdc/build/OpenButton.js'],
     function(args, OpenButton) {
-	      return React.createElement(OpenButton, {task: args.task});
+        //console.log("PIPELINES: {{pipelines}}";
+        //return React.createElement(OpenButton, {task: args.task, pipelines: '{{pipelines}}'});
+        const doc = new DOMParser().parseFromString('{{pipelines}}', "text/html");
+        return React.createElement(OpenButton, {task: args.task, pipelines: doc.documentElement.textContent});
     }
 );
 
@@ -20,26 +23,6 @@ function file_browser(host, user) {
   let next = encodeURIComponent('/user-redirect/lab/tree/projects');
   spawnurl = `https://jupyter.${host}/hub/spawn?profile=base&projects=${projects}&next=${next}`;
   window.open(spawnurl)
-  /*
-  //SEE: https://jupyterhub.readthedocs.io/en/0.8.1/_static/rest-api/index.html
-  killurl = `https://jupyter.${host}/hub/api/users/${user}/server`;
-  //NOTE: @ in username may need encoding
-  //https://jupyter.asdc.cloud.edu.au/hub/api/users/USERNAME/server
-  //https://jupyter.asdc.cloud.edu.au/hub/api/users/USERNAME/servers/base
-  console.log("URL: " + spawnurl);
-  console.log("KILLURL: " + killurl);
-  //First shutdown any existing server
-  $.ajax({
-    url: killurl,
-    type: 'DELETE',
-    success: function(result) {
-      console.log("DELETED!");
-      window.open(spawnurl)
-      //$(".result").html(result);
-      //alert( "Load was performed." );
-      //location.reload();
-    }
-  });*/
 }
 
 function pipeline_project(url) {
@@ -122,11 +105,4 @@ try {
     throw e
   }
 }
-
-//tus::tus-uppy-p1100077/jpg-1e-image/jpeg-4985344-1600850799723-https://tusd.asdc.cloud.edu.au/files/::126748795151:
-//"{"size":4985344,
-//  "metadata":{"relativePath":null,"name":"P1100077.JPG","type":"image/jpeg","filetype":"image/jpeg","filename":"P1100077.JPG"},
-//  "creationTime":"Wed Jul 27 2022 17:29:29 GMT+1000 (Australian Eastern Standard Time)",
-//  "uploadUrl":"https://tusd.asdc.cloud.edu.au/files/857076892a1159d8c2373107c85d2885"
-//  }"
 

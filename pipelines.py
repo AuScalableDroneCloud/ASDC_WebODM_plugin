@@ -18,6 +18,13 @@ def get_urls(user=None):
 
     return pipeline_urls
 
+def get_all(user):
+    #Get all pipelines with the launch url, requires user
+    pipelines = get_json(user)
+    for p in pipelines:
+        p["url"] = get_fullurl(p, user.email, encode_again=False)
+    return pipelines
+
 def get_json(user=None):
     pipeline_urls = get_urls(user)
 
@@ -27,7 +34,16 @@ def get_json(user=None):
         if response.status_code == 200:
             try:
                 pipeline = yaml.safe_load(response.text)
-                pipelines.extend(pipeline['pipelines'])
+                pl = pipeline['pipelines']
+                #First entry = defaults, subsequent = custom
+                custom = (len(pipelines) > 0)
+                #Set the custom flag
+                for p in pl:
+                    p['custom'] = custom
+                pipelines.extend(pl)
+                #if not custom:
+                #    #Divider - null pipeline
+                #    pipelines.extend({"name": "", "tag": "", "description": "", "maintainer": "", "source": "", "image": "", "entrypoint": "", "icon": "", "inputs": "", "custom": false})
             except (Exception) as e:
                 from app.plugins import logger
                 logger.error("Error parsing yaml:" + str(e))

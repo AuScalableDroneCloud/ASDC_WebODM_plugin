@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from app.plugins import logger
+from .pipelines import get_json, get_all
+import json
 
 class SettingsForm(forms.Form):
     pipelines_url = forms.CharField(label='Custom pipelines repo URL(s) (comma-separated)', required=False, max_length=1024, widget=forms.TextInput(attrs={'placeholder': 'Pipelines Url'}))
@@ -33,13 +35,18 @@ def HomeView(plugin):
 
 
 def LoadButtonsView(plugin):
+
     def view(request):
+        pipelines = []
+        if request.user.is_authenticated:
+            pipelines = get_all(request.user)
 
         return render(
             request,
             plugin.template_path("load_buttons.js"),
             {
                 "api_url": "/api" + plugin.public_url("").rstrip("/"),
+                "pipelines": json.dumps(pipelines),
             },
             content_type="text/javascript",
         )
