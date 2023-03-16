@@ -22,7 +22,7 @@ export default class OpenButton extends Component {
 
   tid = this.props.task ? this.props.task.id : '';
   pid = this.props.task ? this.props.task.project : '';
-  tname = this.props.task ? this.props.task.name : '';
+  tname = this.props.task && this.props.task.name ? this.props.task.name : 'unnamed';
   pipelines = JSON.parse(this.props.pipelines.replaceAll("PROJECTS", this.props.task.project).replaceAll("TASKS", this.props.task.id));
   //Always use the base profile for these links for now
   //handleClick = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=base&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
