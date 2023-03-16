@@ -25,13 +25,19 @@ export default class OpenButton extends Component {
   tname = this.props.task ? this.props.task.name : '';
   pipelines = JSON.parse(this.props.pipelines.replaceAll("PROJECTS", this.props.task.project).replaceAll("TASKS", this.props.task.id));
   //Always use the base profile for these links for now
-  handleClick = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=base&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
+  //handleClick = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=base&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
+  next = encodeURIComponent(`/user-redirect/asdc/import?project=${this.pid}&task=${this.tid}&name=${this.tname}`);
+  url = `https://jupyter.${location.host}/hub/spawn?profile=base&projects=${this.pid}&tasks=${this.tid}&name=${this.tname}&next=${this.next}`;
+  handleClick = () => window.open(`${this.url}`, '_blank');
+
   //handleClickNotebook = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=${this.profile}&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
 
   //next = encodeURIComponent(`/user-redirect/asdc/browse?project=${this.pid}&task=${this.tid}`);
   //handleClickFiles = () => window.open(`https://jupyter.${location.host}/hub/spawn?projects=${this.pid}&tasks=${this.tid}&next=${this.next}`, '_blank');
 
   render() {
+    const url = this.url;
+
 		const menuItems = this.pipelines
 			.map(pipeline => (
 				<MenuItem
@@ -54,7 +60,7 @@ export default class OpenButton extends Component {
 				<i className={"fas fa-stream"} />
 				&nbsp; {"  "} Run Pipeline
 			</Fragment>
-		
+
 		);
 
     //    <p>Task Status: {this.props.task.status}</p>
@@ -70,13 +76,14 @@ export default class OpenButton extends Component {
         >
           {menuItems}
         </DropdownButton>
-        <button className="btn btn-default btn-sm"
-          onClick={this.handleClick}
-          disabled={!(this.props.task.status == STATE_NONE || this.props.task.status == STATE_COMPLETED)}
-        >
-          <i className={"fab fa-python icon"}></i>&nbsp;
-          Open Notebook
-        </button>
+        <a href={url} target='_blank'>
+          <button className="btn btn-default btn-sm"
+            disabled={!(this.props.task.status == STATE_NONE || this.props.task.status == STATE_COMPLETED)}
+          >
+            <i className={"fab fa-python icon"}></i>&nbsp;
+            Open Notebook
+          </button>
+        </a>
       </div>
 		);
 	}
