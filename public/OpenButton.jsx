@@ -32,19 +32,19 @@ export default class OpenButton extends Component {
 
   //Should probably load this data from ExportAssetPanel rather than duplicating, also check for available assets...
   assets = [{"name" : "Orthophoto", "icon" : "fa fa-image",
-             "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=orthophoto.tif')}`,
+             "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&asset=orthophoto.tif')}`,
               "disabled" : this.props.task.available_assets.indexOf('orthophoto.tif') == -1},
             {"name" : "Surface Model", "icon" : "fa fa-chart-area",
-              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=dsm.tif')}`,
+              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&asset=dsm.tif')}`,
               "disabled" : this.props.task.available_assets.indexOf('dsm.tif') == -1},
             {"name" : "Point Cloud", "icon" : "fa fa-cube",
-              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=georeferenced_model.laz')}`,
+              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&asset=georeferenced_model.laz')}`,
               "disabled" : this.props.task.available_assets.indexOf('georeferenced_model.laz') == -1},
             {"name" : "Textured Model", "icon" : "fab fa-connectdevelop",
-              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=textured_model.zip')}`,
+              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&asset=textured_model.zip')}`,
               "disabled" : this.props.task.available_assets.indexOf('textured_model.zip') == -1},
             {"name" : "Textured Model (gLTF)", "icon" : "fab fa-connectdevelop",
-              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=textured_model.glb')}`,
+              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&asset=textured_model.glb')}`,
               "disabled" : this.props.task.available_assets.indexOf('textured_model.glb') == -1},
            ]
 
