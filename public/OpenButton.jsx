@@ -7,13 +7,6 @@ import $ from 'jquery';
 
 import "./Button.scss";
 
-const STATE_NONE = 0;
-const STATE_QUEUED = 10;
-const STATE_RUNNING = 20;
-const STATE_ERROR = 30;
-const STATE_COMPLETED = 40;
-const STATE_CANCELLED = 50;
-
 export default class OpenButton extends Component {
   static propTypes = {
       task: PropTypes.object.isRequired,
@@ -26,17 +19,63 @@ export default class OpenButton extends Component {
   pipelines = JSON.parse(this.props.pipelines.replaceAll("PROJECTS", this.props.task.project).replaceAll("TASKS", this.props.task.id));
   //Always use the base profile for these links for now
   //handleClick = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=base&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
-  next = encodeURIComponent(`/user-redirect/asdc/import?project=${this.pid}&task=${this.tid}&name=${this.tname}`);
-  url = `https://jupyter.${location.host}/hub/spawn?profile=base&projects=${this.pid}&tasks=${this.tid}&name=${this.tname}&next=${this.next}`;
-  handleClick = () => window.open(`${this.url}`, '_blank');
+  nextbase = `/user-redirect/asdc/import?project=${this.pid}&task=${this.tid}&name=${this.tname}`;
+  //next = encodeURIComponent(nextbase);
+  //url = `https://jupyter.${location.host}/hub/spawn?profile=base&projects=${this.pid}&tasks=${this.tid}&name=${this.tname}&next=${this.next}`;
+  //handleClick = () => window.open(`${this.url}`, '_blank');
+  base = `https://jupyter.${location.host}/hub/spawn?profile=base&projects=${this.pid}&tasks=${this.tid}&name=${this.tname}`
 
   //handleClickNotebook = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=${this.profile}&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
 
   //next = encodeURIComponent(`/user-redirect/asdc/browse?project=${this.pid}&task=${this.tid}`);
   //handleClickFiles = () => window.open(`https://jupyter.${location.host}/hub/spawn?projects=${this.pid}&tasks=${this.tid}&next=${this.next}`, '_blank');
 
+  //Should probably load this data from ExportAssetPanel rather than duplicating, also check for available assets...
+  assets = [{"name" : "Orthophoto", "icon" : "fa fa-image",
+             "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=orthophoto.tif')}`,
+              "disabled" : this.props.task.available_assets.indexOf('orthophoto.tif') == -1},
+            {"name" : "Surface Model", "icon" : "fa fa-chart-area",
+              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=dsm.tif')}`,
+              "disabled" : this.props.task.available_assets.indexOf('dsm.tif') == -1},
+            {"name" : "Point Cloud", "icon" : "fa fa-cube",
+              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=georeferenced_model.laz')}`,
+              "disabled" : this.props.task.available_assets.indexOf('georeferenced_model.laz') == -1},
+            {"name" : "Textured Model", "icon" : "fab fa-connectdevelop",
+              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=textured_model.zip')}`,
+              "disabled" : this.props.task.available_assets.indexOf('textured_model.zip') == -1},
+            {"name" : "Textured Model (gLTF)", "icon" : "fab fa-connectdevelop",
+              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&filename=textured_model.glb')}`,
+              "disabled" : this.props.task.available_assets.indexOf('textured_model.glb') == -1},
+           ]
+
   render() {
     const url = this.url;
+
+		const nMenuItems = this.assets
+			.map(asset => (
+				<MenuItem
+					key={asset.name}
+					tag={"a"}
+          href={asset.url}
+          target='_blank'
+          to=''
+          disabled={asset.disabled}
+				>
+					<Fragment>
+           <i className={asset.icon}></i>
+						{"  "}
+						{asset.name}
+					</Fragment>
+				</MenuItem>
+			));
+
+		const ntitle = (
+			<Fragment>
+				<i className={"fab fa-python"} />
+				&nbsp; {"  "} Open Notebook
+			</Fragment>
+
+		);
 
 		const menuItems = this.pipelines
 			.map(pipeline => (
@@ -64,27 +103,28 @@ export default class OpenButton extends Component {
 		);
 
     //    <p>Task Status: {this.props.task.status}</p>
+
 		return (
-      <div className="open-buttons">
+			<Fragment>
         <DropdownButton
           id={"pipelinesDropdown"}
           bsStyle={"default"}
           bsSize={"small"}
           className={"pipeline-btn"}
           title={title}
-          disabled={!(this.props.task.status == STATE_NONE || this.props.task.status == STATE_COMPLETED)}
         >
           {menuItems}
         </DropdownButton>
-        <a href={url} target='_blank'>
-          <button className="btn btn-default btn-sm"
-            disabled={!(this.props.task.status == STATE_NONE || this.props.task.status == STATE_COMPLETED)}
-          >
-            <i className={"fab fa-python icon"}></i>&nbsp;
-            Open Notebook
-          </button>
-        </a>
-      </div>
+        <DropdownButton
+          id={"notebookDropdown"}
+          bsStyle={"default"}
+          bsSize={"small"}
+          className={"notebook-btn"}
+          title={ntitle}
+        >
+          {nMenuItems}
+        </DropdownButton>
+			</Fragment>
 		);
 	}
 } 

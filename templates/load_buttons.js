@@ -1,10 +1,19 @@
+const STATE_NONE = 0;
+const STATE_QUEUED = 10;
+const STATE_RUNNING = 20;
+const STATE_ERROR = 30;
+const STATE_COMPLETED = 40;
+const STATE_CANCELLED = 50;
+
 PluginsAPI.Dashboard.addTaskActionButton(
     ['asdc/build/OpenButton.js'],
     function(args, OpenButton) {
         //console.log("PIPELINES: {{pipelines}}";
         //return React.createElement(OpenButton, {task: args.task, pipelines: '{{pipelines}}'});
-        const doc = new DOMParser().parseFromString('{{pipelines}}', "text/html");
-        return React.createElement(OpenButton, {task: args.task, pipelines: doc.documentElement.textContent});
+        if (args.task.status == STATE_NONE || args.task.status == STATE_COMPLETED) {
+          const doc = new DOMParser().parseFromString('{{pipelines}}', "text/html");
+          return React.createElement(OpenButton, {task: args.task, pipelines: doc.documentElement.textContent});
+        }
     }
 );
 
