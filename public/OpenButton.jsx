@@ -15,19 +15,12 @@ export default class OpenButton extends Component {
 
   tid = this.props.task ? this.props.task.id : '';
   pid = this.props.task ? this.props.task.project : '';
-  tname = this.props.task && this.props.task.name ? this.props.task.name : 'unnamed';
+  tname = this.props.task && this.props.task.name ? this.props.task.name : `Task #${this.tid}`;
   pipelines = JSON.parse(this.props.pipelines.replaceAll("PROJECTS", this.props.task.project).replaceAll("TASKS", this.props.task.id));
   //Always use the base profile for these links for now
-  //handleClick = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=base&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
   nextbase = `/user-redirect/asdc/import?project=${this.pid}&task=${this.tid}&name=${this.tname}`;
-  //next = encodeURIComponent(nextbase);
-  //url = `https://jupyter.${location.host}/hub/spawn?profile=base&projects=${this.pid}&tasks=${this.tid}&name=${this.tname}&next=${this.next}`;
-  //handleClick = () => window.open(`${this.url}`, '_blank');
   base = `https://jupyter.${location.host}/hub/spawn?profile=base&projects=${this.pid}&tasks=${this.tid}&name=${this.tname}`
 
-  //handleClickNotebook = () => window.open(`https://jupyter.${location.host}/user-redirect/asdc/import?profile=${this.profile}&project=${this.pid}&task=${this.tid}&name=${this.tname}`, '_blank');
-
-  //next = encodeURIComponent(`/user-redirect/asdc/browse?project=${this.pid}&task=${this.tid}`);
   //handleClickFiles = () => window.open(`https://jupyter.${location.host}/hub/spawn?projects=${this.pid}&tasks=${this.tid}&next=${this.next}`, '_blank');
 
   //Should probably load this data from ExportAssetPanel rather than duplicating, also check for available assets...
@@ -37,6 +30,9 @@ export default class OpenButton extends Component {
             {"name" : "Surface Model", "icon" : "fa fa-chart-area",
               "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&asset=dsm.tif')}`,
               "disabled" : this.props.task.available_assets.indexOf('dsm.tif') == -1},
+            {"name" : "Terrain Model", "icon" : "fa fa-chart-area",
+              "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&asset=dtm.tif')}`,
+              "disabled" : this.props.task.available_assets.indexOf('dtm.tif') == -1},
             {"name" : "Point Cloud", "icon" : "fa fa-cube",
               "url" : `${this.base}&next=${encodeURIComponent(this.nextbase + '&asset=georeferenced_model.laz')}`,
               "disabled" : this.props.task.available_assets.indexOf('georeferenced_model.laz') == -1},
