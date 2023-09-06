@@ -69,6 +69,7 @@ class Plugin(PluginBase):
                     #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
                     Menu("Cesium", f"javascript:open_url('https://cesium.{host}/cesium/Apps/ASDC/');", "fas fa-globe-asia"),
                     Menu("Terria", f"javascript:open_url('https://terria.{host}');", "fas fa-map"),
+                    Menu("TERN Shared", "javascript.open_url('https://shared.tern.org.au');", "fas fa-book"),
                   ]),
                 Menu("Pipelines", "#", "fas fa-stream", submenu=submenu),
                 #Menu("Saved projects", "#", "fas fa-stream", submenu=prjmenu),
