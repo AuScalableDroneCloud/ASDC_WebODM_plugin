@@ -88,13 +88,13 @@ def get_nexturl(pipeline):
     nexturl = urllib.parse.quote_plus(f"/user-redirect/{image}/git-pull?repo={repo}{branch}&targetpath={target}{requirements}&urlpath={urlpath}")
     return nexturl
 
-def get_fullurl(pipeline, username, use_mounts=True, encode_again=True, image=None):
+def get_fullurl(pipeline, username, use_mounts=True, encode_again=True, image='base'):
     if pipeline is None:
         #Defaults to pulling the pipelines repo, but not opening any notebook
         pipeline = {'name': 'Default',
                     'tag': 'dev',
                     'source': 'dev',
-                    'image': 'base',
+                    'image': image,
                     'entrypoint': '',
                     }
 
