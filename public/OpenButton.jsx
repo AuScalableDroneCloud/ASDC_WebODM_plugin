@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from "react";
-import { DropdownButton, MenuItem } from "react-bootstrap";
+import { Button, MenuItem } from "react-bootstrap";
 
 import PropTypes from 'prop-types';
-import { Button } from "react-bootstrap";
-import $ from 'jquery';
+//import $ from 'jquery';
 
 import "./Button.scss";
 
@@ -45,81 +44,11 @@ export default class OpenButton extends Component {
            ]
 
   render() {
-    const url = this.url;
-
-		const nMenuItems = this.assets
-			.map(asset => (
-				<MenuItem
-					key={asset.name}
-					tag={"a"}
-          href={asset.url}
-          target='_blank'
-          to=''
-          disabled={asset.disabled}
-				>
-					<Fragment>
-           <i className={asset.icon}></i>
-						{"  "}
-						{asset.name}
-					</Fragment>
-				</MenuItem>
-			));
-
-		const ntitle = (
-			<Fragment>
-				<i className={"fab fa-python"} />
-				&nbsp; {"  "} Open Notebook
-			</Fragment>
-
-		);
-
-		const menuItems = this.pipelines
-			.map(pipeline => (
-				<MenuItem
-					key={pipeline.name}
-					tag={"a"}
-          href={pipeline.url}
-          target='_blank'
-          to=''
-				>
-					<Fragment>
-           <i className={pipeline.icon}></i>
-						{"  "}
-						{pipeline.name}
-					</Fragment>
-				</MenuItem>
-			));
-
-		const title = (
-			<Fragment>
-				<i className={"fas fa-stream"} />
-				&nbsp; {"  "} Run Pipeline
-			</Fragment>
-
-		);
-
-    //    <p>Task Status: {this.props.task.status}</p>
-
 		return (
 			<Fragment>
-        <DropdownButton
-          id={"pipelinesDropdown"}
-          bsStyle={"default"}
-          bsSize={"small"}
-          className={"pipeline-btn"}
-          title={title}
-        >
-          {menuItems}
-        </DropdownButton>
-        <DropdownButton
-          id={"notebookDropdown"}
-          bsStyle={"default"}
-          bsSize={"small"}
-          className={"notebook-btn"}
-          title={ntitle}
-        >
-          {nMenuItems}
-        </DropdownButton>
+        <Button href={`${this.base}&next=${encodeURIComponent(this.nextbase)}`}
+         variant="secondary"
+        ><i className={"fab fa-python"} /> Open notebook</Button>
 			</Fragment>
 		);
 	}
