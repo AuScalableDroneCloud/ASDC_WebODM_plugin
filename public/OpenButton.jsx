@@ -46,6 +46,7 @@ export default class OpenButton extends Component {
   render() {
 		return (
 			<Fragment>
+        {/* Opens JupyterHub from the generated URI */}
         <Button href={`${this.base}&next=${encodeURIComponent(this.nextbase)}`}
          variant="secondary"
         ><i className={"fab fa-python"} /> Open notebook</Button>
