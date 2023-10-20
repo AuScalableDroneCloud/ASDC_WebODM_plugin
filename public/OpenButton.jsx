@@ -45,12 +45,16 @@ export default class OpenButton extends Component {
 
   render() {
 		return (
-			<Fragment>
-        {/* Opens JupyterHub from the generated URI */}
-        <Button href={`${this.base}&next=${encodeURIComponent(this.nextbase)}`}
-         variant="secondary"
+			<div className="asdc_plugin_actions">
+        <Button 
+          {/* Opens JupyterHub from the generated URI */}
+          href={`${this.base}&next=${encodeURIComponent(this.nextbase)}`}
+          variant="secondary"
+          bsStyle={"default"}
+          bsSize={"small"}
+          className={"pipeline-btn"}
         ><i className={"fab fa-python"} /> Open notebook</Button>
-			</Fragment>
+			</div>
 		);
 	}
 } 

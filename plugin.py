@@ -73,7 +73,7 @@ class Plugin(PluginBase):
                     Menu("Terria", f"javascript:open_url('https://terria.{host}');", "fas fa-map"),
                     Menu("TERN Shared", "javascript:open_url('https://shared.tern.org.au');", "fas fa-book"),
                   ]),
-                Menu("Pipelines", "#", "fas fa-stream", submenu=submenu),
+                #Menu("Pipelines", "#", "fas fa-stream", submenu=submenu),
                 #Menu("Saved projects", "#", "fas fa-stream", submenu=prjmenu),
                ]
 
