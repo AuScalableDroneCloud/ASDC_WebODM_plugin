@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Button, MenuItem } from "react-bootstrap";
 
 import PropTypes from 'prop-types';
-//import $ from 'jquery';
+import $ from 'jquery';
 
 import "./Button.scss";
 
@@ -46,8 +46,8 @@ export default class OpenButton extends Component {
   render() {
 		return (
 			<div className="asdc_plugin_actions">
+        {/* Opens JupyterHub from the generated URI */}
         <Button 
-          {/* Opens JupyterHub from the generated URI */}
           href={`${this.base}&next=${encodeURIComponent(this.nextbase)}`}
           variant="secondary"
           bsStyle={"default"}
