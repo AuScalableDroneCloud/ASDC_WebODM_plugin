@@ -52,7 +52,7 @@ class Plugin(PluginBase):
         #Icons: https://fontawesome.com/v5/search?m=free
         def_pipeline = None
         #def_pipeline = pipelines[0] #Use a default pipeline instead
-        # all_url = get_fullurl(def_pipeline, user.email, image=None)
+        all_url = get_fullurl(def_pipeline, user.email, image=None)
         # base_url = get_fullurl(def_pipeline, user.email, image="base")
         # gpu_url = get_fullurl(def_pipeline, user.email, image="gpu")
         # ml_url = get_fullurl(def_pipeline, user.email, image="ml")
@@ -65,7 +65,7 @@ class Plugin(PluginBase):
                     # Menu("JupyterHub - base", f"javascript:open_url('{base_url}');", "fab fa-python"),
                     # Menu("JupyterHub - gpu", f"javascript:open_url('{gpu_url}');", "fab fa-python"),
                     # Menu("JupyterHub - ml", f"javascript:open_url('{ml_url}');", "fab fa-python"),
-                    # Menu("JupyterHub", f"javascript:open_url('{all_url}');", "fab fa-python"),
+                    Menu("JupyterHub", f"javascript:open_url('{all_url}');", "fab fa-python"),
                     Menu("Project Files", f"javascript:file_browser('{host}', '{user.email}');", "fas fa-folder-open icon"),
                     #Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
                     #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
