@@ -14,7 +14,7 @@ from .api_views import SaveProjects, ClearProjects
 
 import os
 host = os.environ.get('WO_HOST')
-from .pipelines import get_json, get_fullurl
+from .pipelines import get_json, get_fullurl, get_baseurl
 import requests
 import urllib.parse
 
@@ -52,7 +52,7 @@ class Plugin(PluginBase):
         #Icons: https://fontawesome.com/v5/search?m=free
         def_pipeline = None
         #def_pipeline = pipelines[0] #Use a default pipeline instead
-        all_url = get_fullurl(def_pipeline, user.email, image=None)
+        all_url = get_baseurl()
         # base_url = get_fullurl(def_pipeline, user.email, image="base")
         # gpu_url = get_fullurl(def_pipeline, user.email, image="gpu")
         # ml_url = get_fullurl(def_pipeline, user.email, image="ml")
