@@ -113,3 +113,6 @@ def get_fullurl(pipeline, username, use_mounts=True, encode_again=True, image='b
         fullurl = urllib.parse.quote_plus(fullurl)
     return fullurl
 
+def get_baseurl():
+    host = os.environ.get('WO_HOST')
+    return f'https://jupyter.{host}/'

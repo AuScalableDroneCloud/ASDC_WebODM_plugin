@@ -14,7 +14,7 @@ from .api_views import SaveProjects, ClearProjects
 
 import os
 host = os.environ.get('WO_HOST')
-from .pipelines import get_json, get_fullurl
+from .pipelines import get_json, get_fullurl, get_baseurl
 import requests
 import urllib.parse
 
@@ -29,20 +29,20 @@ class Plugin(PluginBase):
         submenu = []
         if not user.is_authenticated:
             return []
-        pipelines = get_json(user)
-        for p in pipelines:
-            #Set the open function, will alert and abort if inputs not available
-            function = 'pipeline_run';
-            if "inputs" in p and "task" in p["inputs"]:
-                function = 'pipeline_task';
-            elif "inputs" in p and "project" in p["inputs"]:
-                function = 'pipeline_project';
+        # pipelines = get_json(user)
+        # for p in pipelines:
+        #     #Set the open function, will alert and abort if inputs not available
+        #     function = 'pipeline_run';
+        #     if "inputs" in p and "task" in p["inputs"]:
+        #         function = 'pipeline_task';
+        #     elif "inputs" in p and "project" in p["inputs"]:
+        #         function = 'pipeline_project';
 
-            #Construct the next= url
-            tag = p["tag"]
-            image = p["image"]
-            fullurl = get_fullurl(p, user.email)
-            submenu += [Menu(p["name"], f"javascript:{function}('{fullurl}');", p["icon"])]
+        #     #Construct the next= url
+        #     tag = p["tag"]
+        #     image = p["image"]
+        #     fullurl = get_fullurl(p, user.email)
+        #     submenu += [Menu(p["name"], f"javascript:{function}('{fullurl}');", p["icon"])]
 
         prjmenu = [Menu("Add To Saved", f"javascript:save_open_projects();", "fas fa-project-diagram"),
                    Menu("Clear Saved", f"javascript:clear_open_projects();", "fas fa-trash-alt")]
@@ -52,18 +52,20 @@ class Plugin(PluginBase):
         #Icons: https://fontawesome.com/v5/search?m=free
         def_pipeline = None
         #def_pipeline = pipelines[0] #Use a default pipeline instead
-        base_url = get_fullurl(def_pipeline, user.email, image="base")
-        gpu_url = get_fullurl(def_pipeline, user.email, image="gpu")
-        ml_url = get_fullurl(def_pipeline, user.email, image="ml")
+        all_url = get_baseurl()
+        # base_url = get_fullurl(def_pipeline, user.email, image="base")
+        # gpu_url = get_fullurl(def_pipeline, user.email, image="gpu")
+        # ml_url = get_fullurl(def_pipeline, user.email, image="ml")
         return [#Menu("ASDC", self.public_url(""), "fas fa-road"),
                 Menu("ASDC Tools", "#", "fas fa-tools", submenu=[
                     Menu("Settings", self.public_url(""), "fas fa-cog"),
                     #Menu("JupyterHub - base", f"javascript:open_url('https://jupyter.{host}/hub/spawn/{user.email}/base?profile=base');", "fab fa-python"),
                     #Menu("JupyterHub - gpu", f"javascript:open_url('https://jupyter.{host}/hub/spawn/{user.email}/gpu?profile=gpu');", "fab fa-python"),
                     #Menu("JupyterHub - ml", f"javascript:open_url('https://jupyter.{host}/hub/spawn/{user.email}/ml?profile=ml');", "fab fa-python"),
-                    Menu("JupyterHub - base", f"javascript:open_url('{base_url}');", "fab fa-python"),
-                    Menu("JupyterHub - gpu", f"javascript:open_url('{gpu_url}');", "fab fa-python"),
-                    Menu("JupyterHub - ml", f"javascript:open_url('{ml_url}');", "fab fa-python"),
+                    # Menu("JupyterHub - base", f"javascript:open_url('{base_url}');", "fab fa-python"),
+                    # Menu("JupyterHub - gpu", f"javascript:open_url('{gpu_url}');", "fab fa-python"),
+                    # Menu("JupyterHub - ml", f"javascript:open_url('{ml_url}');", "fab fa-python"),
+                    Menu("JupyterHub", f"javascript:open_url('{all_url}');", "fab fa-python"),
                     Menu("Project Files", f"javascript:file_browser('{host}', '{user.email}');", "fas fa-folder-open icon"),
                     #Menu("Cesium", self.public_url("cesium/"), "fas fa-globe-asia"),
                     #Menu("Terria", self.public_url("terria/"), "fas fa-map"),
