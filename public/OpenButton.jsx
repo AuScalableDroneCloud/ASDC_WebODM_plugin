@@ -47,7 +47,6 @@ export default class OpenButton extends Component {
 		return (
 			<div className="asdc_plugin_actions">
         <Button 
-          {/* Opens JupyterHub from the generated URI */}
           href={`${this.base}&next=${encodeURIComponent(this.nextbase)}`}
           variant="secondary"
           bsStyle={"default"}
