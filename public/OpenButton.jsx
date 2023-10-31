@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Button, MenuItem } from "react-bootstrap";
+import { DropdownButton, MenuItem, Button } from "react-bootstrap";
 
 import PropTypes from 'prop-types';
 import $ from 'jquery';
@@ -44,9 +44,44 @@ export default class OpenButton extends Component {
            ]
 
   render() {
+		const menuItems = this.pipelines
+			.map(pipeline => (
+				<MenuItem
+					key={pipeline.name}
+					tag={"a"}
+          href={pipeline.url}
+          target='_blank'
+          to=''
+				>
+					<Fragment>
+           <i className={pipeline.icon}></i>
+						{"  "}
+						{pipeline.name}
+					</Fragment>
+				</MenuItem>
+			));
+
+		const title = (
+			<Fragment>
+				<i className={"fas fa-stream"} />
+				&nbsp; {"  "} Run Pipeline
+			</Fragment>
+
+		);
+
+    //    <p>Task Status: {this.props.task.status}</p>
+
 		return (
-			<div className="asdc_plugin_actions">
-        {/* Opens JupyterHub from the generated URI */}
+			<Fragment>
+        <DropdownButton
+          id={"pipelinesDropdown"}
+          bsStyle={"default"}
+          bsSize={"small"}
+          className={"pipeline-btn"}
+          title={title}
+        >
+          {menuItems}
+        </DropdownButton>
         <Button 
           href={`${this.base}&next=${encodeURIComponent(this.nextbase)}`}
           variant="secondary"
@@ -54,7 +89,7 @@ export default class OpenButton extends Component {
           bsSize={"small"}
           className={"pipeline-btn"}
         ><i className={"fab fa-python"} /> Open notebook</Button>
-			</div>
+			</Fragment>
 		);
 	}
 } 
