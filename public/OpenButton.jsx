@@ -72,7 +72,7 @@ export default class OpenButton extends Component {
     //    <p>Task Status: {this.props.task.status}</p>
 
 		return (
-			<Fragment>
+			<div className="asdc-plugin-button-group">
         <DropdownButton
           id={"pipelinesDropdown"}
           bsStyle={"default"}
@@ -89,7 +89,7 @@ export default class OpenButton extends Component {
           bsSize={"small"}
           className={"pipeline-btn"}
         ><i className={"fab fa-python"} /> Open notebook</Button>
-			</Fragment>
+			</div>
 		);
 	}
 } 
