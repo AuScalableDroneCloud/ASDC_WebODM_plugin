@@ -1,3 +1,11 @@
 .icon{
 	margin-right: 0.5em;
 }
+
+//Apply margins to all buttons within the group
+.asdc-plugin-button-group {
+	.btn {
+		margin-right: 4px;
+		margin-top: 4px;
+	}
+}
