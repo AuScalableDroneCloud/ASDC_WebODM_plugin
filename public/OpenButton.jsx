@@ -4,8 +4,6 @@ import { DropdownButton, MenuItem, Button } from "react-bootstrap";
 import PropTypes from 'prop-types';
 import $ from 'jquery';
 
-import "./Button.scss";
-
 export default class OpenButton extends Component {
   static propTypes = {
       task: PropTypes.object.isRequired,
